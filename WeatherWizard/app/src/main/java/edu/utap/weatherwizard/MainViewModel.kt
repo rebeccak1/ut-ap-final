@@ -16,15 +16,13 @@ class MainViewModel : ViewModel() {
     private var cityUUID = ""
     // Only call this from TakePictureWrapper
     fun takePictureUUID(uuid: String) {
-        pictureUUID = uuid
+        cityUUID = uuid
     }
     // LiveData for entire note list, all images
     private var cityMetaList = MutableLiveData<List<CityMeta>>()
 
     // Track current authenticated user
     private var currentAuthUser = invalidUser
-    // Firestore state
-    private val storage = Storage()
     // Database access
     private val dbHelp = ViewModelDBHelper()
 
@@ -48,11 +46,9 @@ class MainViewModel : ViewModel() {
     }
     fun removePhotoAt(position: Int) {
         // XXX Deletion requires two different operations.  What are they?
-        val photoMeta = getPhotoMeta(position)
-        val sort = sortInfo.value!!
-        storage.deleteImage(photoMeta.uuid)
-        dbHelp.removePhotoMeta(sort, photoMeta){
-            photoMetaList.postValue(it)
+        val cityMeta = getCityMeta(position)
+        dbHelp.removeCityMeta(cityMeta){
+            cityMetaList.postValue(it)
         }
     }
 
@@ -75,34 +71,12 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    /////////////////////////////////////////////////////////////
-    // We can't just schedule the file upload and return.
-    // The problem is that our previous picture uploads can still be pending.
-    // So a note can have a pictureFileName that does not refer to an existing file.
-    // That violates referential integrity, which we really like in our db (and programming
-    // model).
-    // So we do not add the pictureFileName to the note until the picture finishes uploading.
-    // That means a user won't see their picture updates immediately, they have to
-    // wait for some interaction with the server.
-    // You could imagine dealing with this somehow using local files while waiting for
-    // a server interaction, but that seems error prone.
-    // Freezing the app during an upload also seems bad.
-    fun pictureSuccess() {
-        val photoFile = TakePictureWrapper.fileNameToFile(pictureUUID)
-        // XXX Write me while preserving referential integrity
-        storage.uploadImage(photoFile, pictureUUID) {
-            createCityMeta(pictureNameByUser, pictureUUID, it)
-            cityUUID = ""
-        }
-    }
-    fun pictureFailure() {
-        // Note, the camera intent will only create the file if the user hits accept
-        // so I've never seen this called
-        cityUUID = ""
-    }
+//    fun pictureSuccess() {
+//
+//        createCityMeta(pictureNameByUser, cityUUID)
+//        cityUUID = ""
+//
+//    }
 
-    fun glideFetch(uuid: String, imageView: ImageView) {
-        Glide.fetch(storage.uuid2StorageReference(uuid),
-            imageView)
-    }
+
 }

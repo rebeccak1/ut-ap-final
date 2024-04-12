@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("XXX", "observe user name " + it.uid)
             viewModel.setCurrentAuthUser(it)
 //            progressBarOn()
-            viewModel.fetchPhotoMeta {
+            viewModel.fetchCityMeta {
 //                progressBarOff()
             }
         }

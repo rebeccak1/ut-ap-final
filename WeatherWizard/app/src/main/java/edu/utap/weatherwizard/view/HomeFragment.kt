@@ -15,23 +15,11 @@ import com.google.android.material.snackbar.Snackbar
 import edu.utap.weatherwizard.MainActivity
 import edu.utap.weatherwizard.MainViewModel
 import edu.utap.weatherwizard.R
-import edu.utap.weatherwizard.SortColumn
 import edu.utap.weatherwizard.databinding.FragmentHomeBinding
 
 class HomeFragment :
     Fragment(R.layout.fragment_home) {
     private val viewModel: MainViewModel by activityViewModels()
-    // It is a real bummer that we must initialize a registerForActivityResult
-    // here or in onViewCreated.  You CAN'T initialize it in an onClickListener
-    // where it could capture state like the file name.
-    private val cameraLauncher = registerForActivityResult(
-        ActivityResultContracts.TakePicture()) { success ->
-        if (success) {
-            viewModel.pictureSuccess()
-        } else {
-            viewModel.pictureFailure()
-        }
-    }
 
     // https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ViewHolder#getBindingAdapterPosition()
     // Getting the position of the selected item is unfortunately complicated
