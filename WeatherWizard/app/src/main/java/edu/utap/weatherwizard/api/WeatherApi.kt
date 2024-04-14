@@ -12,35 +12,27 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.lang.reflect.Type
 
 
 interface WeatherApi {
-    @GET("/data/3.0/onecall?lat=33.44&lon=-94.04&exclude=current,minutely,hourly,alerts&appid={api_key}")
-    suspend fun getWeather(@Path("api_key") api_key: String) : WeatherResponse
+    @GET("/data/3.0/onecall?lat=33.44&lon=-94.04&exclude=current,minutely,hourly,alerts&appid=1e014bfae9d273d95b456a0e8b290034")
+    suspend fun getWeather() : WeatherResponse
+    //@Query("lat") lat: String, @Query("lon") lon: String
 
     class WeatherResponse(val data: WeatherData)
 
     class WeatherData(
-        val daily: List<WeatherDailyResponse>,
-        val lat: Int,
-        val lon: Int,
+        val lat: Double,
+        val lon: Double,
         val timezone: String,
-        val timezone_offset: String,
-
+        val timezone_offset: Int,
+//        val daily: List<WeatherDailyResponse>,
     )
     data class WeatherDailyResponse(val data: WeatherDaily)
 
     companion object {
-        // Tell Gson to use our SpannableString deserializer
-        private fun buildGsonConverterFactory(): GsonConverterFactory {
-            val gsonBuilder = GsonBuilder().registerTypeAdapter(
-                SpannableString::class.java, SpannableDeserializer()
-            )
-            return GsonConverterFactory.create(gsonBuilder.create())
-        }
-        // Keep the base URL simple
-        //private const val BASE_URL = "https://www.reddit.com/"
         var httpurl = HttpUrl.Builder()
             .scheme("https")
             .host("api.openweathermap.org")
@@ -49,16 +41,21 @@ interface WeatherApi {
         private fun create(httpUrl: HttpUrl): WeatherApi {
             val client = OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().apply {
-                    // Enable basic HTTP logging to help with debugging.
-                    this.level = HttpLoggingInterceptor.Level.BASIC
+                    this.level = HttpLoggingInterceptor.Level.BODY
                 })
                 .build()
             return Retrofit.Builder()
                 .baseUrl(httpUrl)
                 .client(client)
-                .addConverterFactory(buildGsonConverterFactory())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(WeatherApi::class.java)
         }
     }
 }
+
+//@GET("3/movie/{id}")
+//fun getMovieById(
+//    @Path("id") id: String,
+//    @Query("api_key") apiKey: String = BuildConfig.MOVIE_TOKEN
+//):Call<SearchDetailMovieResponse>

@@ -3,33 +3,37 @@ package edu.cs371m.reddit.api
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class WeatherTemp(
+data class WeatherTemp(val data: WeatherTempData)
+data class WeatherFeelsLike(val data: WeatherFeelsLikeData)
+data class WeatherWeather(val data: List<WeatherWeatherData>)
+
+data class WeatherTempData(
     @SerializedName("day")
-    val day: Float,
+    val day: Double,
     @SerializedName("min")
-    val min: Float,
+    val min: Double,
     @SerializedName("max")
-    val max: Float,
+    val max: Double,
     @SerializedName("night")
-    val night: Float,
+    val night: Double,
     @SerializedName("eve")
-    val eve: Float,
+    val eve: Double,
     @SerializedName("morn")
-    val morn: Float
+    val morn: Double
 )
 
-data class WeatherFeelsLike(
+data class WeatherFeelsLikeData(
     @SerializedName("day")
-    val day: Float,
+    val day: Double,
     @SerializedName("night")
-    val night: Float,
+    val night: Double,
     @SerializedName("eve")
-    val eve: Float,
+    val eve: Double,
     @SerializedName("morn")
-    val morn: Float
+    val morn: Double
 )
 
-data class WeatherWeather(
+data class WeatherWeatherData(
     @SerializedName("id")
     val id: Int,
     @SerializedName("main")
@@ -52,7 +56,7 @@ data class WeatherDaily (
     @SerializedName("moonset")
     val moonset: String,
     @SerializedName("moon_phase")
-    val moon_phase: Float,
+    val moon_phase: Double,
     @SerializedName("summary")
     val summary: String,
     @SerializedName("temp")
@@ -64,22 +68,22 @@ data class WeatherDaily (
     @SerializedName("humidity")
     val humidity: Int,
     @SerializedName("dew_point")
-    val dew_point: Float,
+    val dew_point: Double,
     @SerializedName("wind_speed")
-    val wind_speed: Float?,
+    val wind_speed: Double,
     @SerializedName("wind_deg")
     val wind_deg: Int,
     @SerializedName("wind_gust")
-    val wind_gust: Float,
+    val wind_gust: Double,
     @SerializedName("weather")
     val weather: WeatherWeather,
     @SerializedName("clouds")
     val clouds: Int,
     @SerializedName("pop")
-    val pop: Float,
+    val pop: Double,
     @SerializedName("rain")
-    val rain: Float,
+    val rain: Double =0.0,
     @SerializedName("uvi")
-    val uvi: Float
+    val uvi: Double
 ): Serializable {
 }

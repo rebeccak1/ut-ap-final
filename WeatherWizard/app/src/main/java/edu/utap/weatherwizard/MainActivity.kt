@@ -1,4 +1,5 @@
 package edu.utap.weatherwizard
+
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -17,71 +18,47 @@ import edu.utap.weatherwizard.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private lateinit var authUser : AuthUser
+    private lateinit var authUser: AuthUser
     private val viewModel: MainViewModel by viewModels()
-    companion object {
-        const val TAG = "MainActivity"
-    }
 
-    fun progressBarOn() {
-        binding.indeterminateBar.visibility = View.VISIBLE
-    }
-
-    fun progressBarOff() {
-        binding.indeterminateBar.visibility = View.GONE
-    }
-
-    private fun initMenu() {
-        addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                // Inflate the menu; this adds items to the action bar if it is present.
-                menuInflater.inflate(R.menu.menu_main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.menuLogout -> {
-                        authUser.logout()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        })
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate")
-        // Set the layout for the layout we created
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initMenu()
+        val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(activityMainBinding.root)
+        setSupportActionBar(activityMainBinding.toolbar)
+
 
         // Set up our nav graph
-        navController = findNavController(R.id.mainFrame)
+        navController = findNavController(R.id.main_frame)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        // No need to override onSupportNavigateUp(), because no up navigation
-    }
-
-    // We can only safely initialize AuthUser once onCreate has completed.
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart")
-        // Create authentication object.  This will log the user in if needed
-        authUser = AuthUser(activityResultRegistry)
-        // authUser needs to observe our lifecycle so it can run login activity
-        lifecycle.addObserver(authUser)
-
-        authUser.observeUser().observe(this) {
-            // XXX Write me, user status has changed
-            Log.d("XXX", "observe user name " + it.uid)
-            viewModel.setCurrentAuthUser(it)
-//            progressBarOn()
-            viewModel.fetchCityMeta {
-//                progressBarOff()
-            }
-        }
+        // If we have a toolbar (not actionbar) we don't need to override
+        // onSupportNavigateUp().
+//        activityMainBinding.toolbar.setupWithNavController(navController, appBarConfiguration)
+        //setupActionBarWithNavController(navController, appBarConfiguration)
     }
 }
+
+
+//import android.R
+//import android.os.Bundle
+//import android.widget.TextView
+//import androidx.appcompat.app.AppCompatActivity
+//import edu.utap.weatherwizard.databinding.ActivityMainBinding
+//import edu.utap.weatherwizard.databinding.ActivityRegistrationBinding
+//
+//class MainActivity : AppCompatActivity() {
+//    private var geeksforgeeks: TextView? = null
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        val binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+
+//
+//        // initialising all views through id defined above
+//        geeksforgeeks = binding.gfg
+//        geeksforgeeks!!.setText(
+//            "GeeksForGeeks(Firebase Authentication)"
+//        )
+//}
+//}
