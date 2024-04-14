@@ -1,4 +1,4 @@
-package edu.cs371m.reddit.api
+package edu.utap.weatherwizard.api
 
 import android.text.SpannableString
 import com.google.gson.GsonBuilder
@@ -17,20 +17,20 @@ import java.lang.reflect.Type
 
 
 interface WeatherApi {
-    @GET("/data/3.0/onecall?lat=33.44&lon=-94.04&exclude=current,minutely,hourly,alerts&appid=1e014bfae9d273d95b456a0e8b290034")
-    suspend fun getWeather() : WeatherResponse
-    //@Query("lat") lat: String, @Query("lon") lon: String
+    @GET("/data/3.0/onecall")
+    suspend fun getWeather(@Query("lat") lat: String,
+                           @Query("lon") lon: String,
+                           @Query("exclude") exclude: String="current,minutely,hourly,alerts",
+                           @Query("appid") appid: String="1e014bfae9d273d95b456a0e8b290034") : WeatherDailyResponse
+//@Query("lat") lat: String,
 
-    class WeatherResponse(val data: WeatherData)
-
-    class WeatherData(
+    class WeatherDailyResponse(
         val lat: Double,
         val lon: Double,
         val timezone: String,
         val timezone_offset: Int,
-//        val daily: List<WeatherDailyResponse>,
+        val daily: List<WeatherDaily>
     )
-    data class WeatherDailyResponse(val data: WeatherDaily)
 
     companion object {
         var httpurl = HttpUrl.Builder()

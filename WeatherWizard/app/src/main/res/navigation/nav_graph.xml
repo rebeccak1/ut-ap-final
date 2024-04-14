@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="edu.utap.weatherwizard.view.HomeFragment"
+        android:name="edu.utap.weatherwizard.ui.HomeFragment"
         android:label="Weather Wizard" />
 </navigation>

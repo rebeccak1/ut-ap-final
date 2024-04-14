@@ -1,13 +1,11 @@
-package edu.cs371m.reddit.api
+package edu.utap.weatherwizard.api
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class WeatherTemp(val data: WeatherTempData)
-data class WeatherFeelsLike(val data: WeatherFeelsLikeData)
 data class WeatherWeather(val data: List<WeatherWeatherData>)
 
-data class WeatherTempData(
+data class WeatherTemp(
     @SerializedName("day")
     val day: Double,
     @SerializedName("min")
@@ -22,7 +20,7 @@ data class WeatherTempData(
     val morn: Double
 )
 
-data class WeatherFeelsLikeData(
+data class WeatherFeelsLike(
     @SerializedName("day")
     val day: Double,
     @SerializedName("night")
@@ -54,7 +52,7 @@ data class WeatherDaily (
     @SerializedName("moonrise")
     val moonrise: Int,
     @SerializedName("moonset")
-    val moonset: String,
+    val moonset: Int,
     @SerializedName("moon_phase")
     val moon_phase: Double,
     @SerializedName("summary")
@@ -76,13 +74,13 @@ data class WeatherDaily (
     @SerializedName("wind_gust")
     val wind_gust: Double,
     @SerializedName("weather")
-    val weather: WeatherWeather,
+    val weather: List<WeatherWeatherData>,
     @SerializedName("clouds")
     val clouds: Int,
     @SerializedName("pop")
     val pop: Double,
-    @SerializedName("rain")
-    val rain: Double =0.0,
+//    @SerializedName("rain")
+//    val rain: Double =0.0,
     @SerializedName("uvi")
     val uvi: Double
 ): Serializable {

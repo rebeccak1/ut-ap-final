@@ -1,11 +1,20 @@
-package edu.utap.weatherwizard
+package edu.utap.weatherwizard.ui
 
-import android.widget.ImageView
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import edu.utap.weatherwizard.glide.Glide
+import androidx.lifecycle.viewModelScope
+
+import edu.utap.weatherwizard.User
+import edu.utap.weatherwizard.ViewModelDBHelper
 import edu.utap.weatherwizard.model.CityMeta
+import edu.utap.weatherwizard.invalidUser
+import edu.utap.weatherwizard.api.WeatherDaily
+import edu.utap.weatherwizard.api.WeatherApi
+import edu.utap.weatherwizard.api.WeatherRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
     // It is a real bummer that we need to put this here, but we do because
@@ -25,6 +34,23 @@ class MainViewModel : ViewModel() {
     private var currentAuthUser = invalidUser
     // Database access
     private val dbHelp = ViewModelDBHelper()
+    private val weatherApi = WeatherApi.create()
+    private val repository = WeatherRepository(weatherApi)
+
+    private var netWeatherDaily = MutableLiveData<String>().apply {//List<WeatherDaily
+        // XXX Write me, viewModelScope.launch getSubreddits()
+        viewModelScope.launch(
+            context = viewModelScope.coroutineContext
+                    + Dispatchers.Default
+        ) {
+            Log.d("XXX", "netweatherdaily fetch")
+            postValue(repository.getWeather("33.44", "-94.04"))
+        }
+    }
+
+    fun observeNetWeatherDaily(): LiveData<String> {
+        return netWeatherDaily
+    }
 
 
     /////////////////////////////////////////////////////////////

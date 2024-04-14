@@ -1,19 +1,13 @@
 package edu.utap.weatherwizard
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.MenuProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import edu.utap.weatherwizard.databinding.ActivityMainBinding
+import edu.utap.weatherwizard.ui.MainViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -38,27 +32,3 @@ class MainActivity : AppCompatActivity() {
         //setupActionBarWithNavController(navController, appBarConfiguration)
     }
 }
-
-
-//import android.R
-//import android.os.Bundle
-//import android.widget.TextView
-//import androidx.appcompat.app.AppCompatActivity
-//import edu.utap.weatherwizard.databinding.ActivityMainBinding
-//import edu.utap.weatherwizard.databinding.ActivityRegistrationBinding
-//
-//class MainActivity : AppCompatActivity() {
-//    private var geeksforgeeks: TextView? = null
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        val binding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-
-//
-//        // initialising all views through id defined above
-//        geeksforgeeks = binding.gfg
-//        geeksforgeeks!!.setText(
-//            "GeeksForGeeks(Firebase Authentication)"
-//        )
-//}
-//}

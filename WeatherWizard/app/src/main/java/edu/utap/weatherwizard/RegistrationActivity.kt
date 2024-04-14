@@ -21,12 +21,20 @@ class RegistrationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         firebaseAuth = FirebaseAuth.getInstance()
+        binding.guestButton.setOnClickListener {
+            val intent = Intent(
+                this@RegistrationActivity,
+                MainActivity::class.java
+            )
+            startActivity(intent)
+        }
         binding.loginRedirectText.setOnClickListener {
             val intent = Intent(
                 this@RegistrationActivity,
                 LoginActivity::class.java
             )
             startActivity(intent)
+            finish()
         }
         binding.signupButton.setOnClickListener {
             val email = binding.signupEmail.text.toString()

@@ -1,25 +1,24 @@
-package edu.cs371m.reddit.api
+package edu.utap.weatherwizard.api
 
 import android.util.Log
 
 class WeatherRepository(private val weatherApi: WeatherApi) {
 
-//    private fun unpackPosts(response: RedditApi.ListingResponse): List<RedditPost> {
-//        // XXX Write me.
-//        val posts = mutableListOf<RedditPost>()
-//        for (i in 0..<response.data.children.size){
-//            posts.add(response.data.children[i].data)
+//    private fun unpackPosts(response: WeatherApi.WeatherResponse): List<WeatherDaily> {
+//        val posts = mutableListOf<WeatherDaily>()
+//        for (i in 0..<response.data.daily.size){
+//            posts.add(response.data.daily[i].data)
 //        }
 //        return posts.toList()
 //    }
 
-    suspend fun getWeather(lat: String, lon: String): WeatherApi.WeatherResponse {
-        val response : WeatherApi.WeatherResponse?
+    suspend fun getWeather(lat: String, lon: String): String{//List<WeatherDaily> {
+        val response : WeatherApi.WeatherDailyResponse?
 
-        response = weatherApi.getWeather() //lat, lon
+        response = weatherApi.getWeather(lat,lon)
 
-        return response
-//        return unpackPosts(response!!)
+        return response.daily[0].summary
+//        return unpackPosts(response)
     }
 
 }
