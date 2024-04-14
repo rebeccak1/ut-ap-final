@@ -21,28 +21,28 @@ class HomeFragment: Fragment() {
     private val binding get() = _binding!!
 
     // Set up the adapter and recycler view
-//    private fun initAdapter(binding: FragmentRvBinding) {
-//        val postRowAdapter = PostRowAdapter(viewModel) {
+    private fun initAdapter(binding: FragmentHomeBinding) {
+        val postRowAdapter = DailyRowAdapter(viewModel) {
 //            Log.d("OnePost",
 //                String.format("OnePost title %s",
 //                    if (it.title.length > 32)
 //                        it.title.substring(0, 31) + "..."
 //                    else it.title))
 //            Log.d("doOnePost", "image ${it.imageURL}")
-//            // XXX Write me
+            // XXX Write me
 //            val action = HomeFragmentDirections.actionHomeFragmentToOnePostFragment(it)
 //            findNavController().navigate(action)
-//
-//        }
-//        // XXX Write me, observe posts
-//        val rv = binding.recyclerView
-//        rv.adapter = postRowAdapter
-//        rv.layoutManager = LinearLayoutManager(requireContext())
-//        viewModel.observePosts().observe(viewLifecycleOwner) { postList ->
-//            postRowAdapter.submitList(postList)
-//            Log.d("XXX", "OBSERVING POSTS")
-//        }
-//    }
+
+        }
+        // XXX Write me, observe posts
+        val rv = binding.dailyRV
+        rv.adapter = postRowAdapter
+        rv.layoutManager = LinearLayoutManager(requireContext())
+        viewModel.observeNetWeatherDaily().observe(viewLifecycleOwner) { postList ->
+            postRowAdapter.submitList(postList)
+            Log.d("XXX", "OBSERVING net weather")
+        }
+    }
 
 //    private fun initSwipeLayout(swipe : SwipeRefreshLayout) {
 //        // XXX Write me
@@ -69,7 +69,7 @@ class HomeFragment: Fragment() {
         viewModel.observeNetWeatherDaily().observe(viewLifecycleOwner){
             binding.tb.text = it
         }
-//        initAdapter(binding)
+        initAdapter(binding)
 //        initSwipeLayout(binding.swipeRefreshLayout)
 
 //        viewModel.fetchDone.observe(viewLifecycleOwner) {
