@@ -26,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
                 this@LoginActivity,
                 RegistrationActivity::class.java
             )
+
             startActivity(intent)
         }
 
@@ -57,6 +58,12 @@ class LoginActivity : AppCompatActivity() {
                         this@LoginActivity,
                         MainActivity::class.java
                     )
+
+                    intent.putExtra("username", it.user?.displayName)
+                    intent.putExtra("useremail", it.user?.email)
+                    intent.putExtra("userid", it.user?.uid)
+
+
                     startActivity(intent)
                     finish()
 

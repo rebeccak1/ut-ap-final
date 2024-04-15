@@ -7,5 +7,24 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="edu.utap.weatherwizard.ui.HomeFragment"
-        android:label="Weather Wizard" />
+        android:label="Weather Wizard" >
+        <action
+            android:id="@+id/action_homeFragment_to_oneDayFragment"
+            app:destination="@id/oneDayFragment">
+            <argument
+                android:name="daily"
+                app:argType="edu.utap.weatherwizard.api.WeatherDaily"
+                />
+        </action>
+        </fragment>
+
+    <fragment
+        android:id="@+id/oneDayFragment"
+        android:name="edu.utap.weatherwizard.ui.OneDayFragment"
+        android:label="OneDay" >
+        <argument
+            android:name="daily"
+            app:argType="edu.utap.weatherwizard.api.WeatherDaily"
+            />
+    </fragment>
 </navigation>

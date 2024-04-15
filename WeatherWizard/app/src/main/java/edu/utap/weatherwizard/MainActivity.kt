@@ -22,6 +22,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(activityMainBinding.root)
         setSupportActionBar(activityMainBinding.toolbar)
 
+        val extras = intent.extras
+        if (extras != null) {
+            val username = extras.getString("username")
+            val useremail = extras.getString("useremail")
+            val uuid = extras.getString("userid")
+
+            val user = User(username, useremail, uuid!!)
+            viewModel.setCurrentAuthUser(user)
+
+        }
+
 
         // Set up our nav graph
         navController = findNavController(R.id.main_frame)

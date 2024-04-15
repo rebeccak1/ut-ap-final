@@ -11,15 +11,15 @@ import java.text.SimpleDateFormat
 import edu.utap.weatherwizard.R
 
 class DailyRowAdapter(private val viewModel: MainViewModel,
-                     private val navigateToOnePost: (WeatherDaily)->Unit )
+                     private val navigateToOneDay: (WeatherDaily)->Unit )
     : ListAdapter<WeatherDaily, DailyRowAdapter.VH>(WeatherDailyDiff()) {
 
     inner class VH(val dailyRowBinding: DailyRowBinding)
         : RecyclerView.ViewHolder(dailyRowBinding.root) {
         init {
-//            rowPostBinding.selfText.setOnClickListener {
-//                navigateToOnePost(getItem(bindingAdapterPosition))
-//            }
+            dailyRowBinding.rowDay.setOnClickListener {
+                navigateToOneDay(getItem(bindingAdapterPosition))
+            }
 
         }
     }
@@ -78,4 +78,3 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
         }
     }
 }
-
