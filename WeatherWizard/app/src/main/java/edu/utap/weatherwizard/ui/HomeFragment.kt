@@ -30,7 +30,7 @@ class HomeFragment: Fragment() {
 //                    else it.title))
 //            Log.d("doOnePost", "image ${it.imageURL}")
             // XXX Write me
-            val action = HomeFragmentDirections.actionHomeFragmentToOnePostFragment(it)
+            val action = HomeFragmentDirections.actionHomeFragmentToOneDayFragment(it)
             findNavController().navigate(action)
 
         }

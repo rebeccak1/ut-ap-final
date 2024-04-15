@@ -36,7 +36,6 @@ class OneDayFragment: Fragment() {
 
 //        viewModel.hideActionBarFavorites()
         Log.d(javaClass.simpleName, "onViewCreated")
-args.
 
     }
     override fun onDestroyView() {

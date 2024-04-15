@@ -1,6 +1,7 @@
 package edu.utap.weatherwizard
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
             val user = User(username, useremail, uuid!!)
             viewModel.setCurrentAuthUser(user)
-
+            Log.d("XXX", username.toString() +" " + useremail.toString() +" " + uuid.toString())
         }
 
 
