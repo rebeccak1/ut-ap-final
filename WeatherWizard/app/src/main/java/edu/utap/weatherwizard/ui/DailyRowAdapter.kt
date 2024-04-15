@@ -1,17 +1,14 @@
 package edu.utap.weatherwizard.ui
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.api.WeatherDaily
-import edu.utap.weatherwizard.api.WeatherWeather
 import edu.utap.weatherwizard.databinding.DailyRowBinding
-import edu.utap.weatherwizard.glide.Glide
+import java.text.SimpleDateFormat
+import edu.utap.weatherwizard.R
 
 class DailyRowAdapter(private val viewModel: MainViewModel,
                      private val navigateToOnePost: (WeatherDaily)->Unit )
@@ -37,10 +34,31 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
         //XXX Write me.
         val rowBinding = holder.dailyRowBinding
         val item = getItem(position)
+        val date = java.util.Date(item.dt.toLong()*1000)
+        val simpleDateformat = SimpleDateFormat("E") // the day of the week abbreviated
+        val dow = simpleDateformat.format(date)
+        val calendar = java.util.Calendar.getInstance()
+        calendar.setTime(date)
 
-        rowBinding.title.text = item.title
+        rowBinding.rowDay.text = dow
+        rowBinding.rowDate.text = calendar.get(java.util.Calendar.DAY_OF_MONTH).toString()
+        rowBinding.rowHigh.text = "%.0f".format(item.temp.max.toString())
+        rowBinding.rowLow.text = item.temp.min.toString().format("%.0f")
 
-//        Glide.glideFetch(item.imageURL, item.thumbnailURL, rowBinding.image)
+        when(item.weather[0].icon){
+            "01d" -> rowBinding.rowIcon.setImageResource(R.drawable.clearsky)
+            "02d" -> rowBinding.rowIcon.setImageResource(R.drawable.few_clouds)
+            "03d" -> rowBinding.rowIcon.setImageResource(R.drawable.scattered_clouds)
+            "04d" -> rowBinding.rowIcon.setImageResource(R.drawable.broken_clouds)
+            "09d" -> rowBinding.rowIcon.setImageResource(R.drawable.shower_rain)
+            "10d" -> rowBinding.rowIcon.setImageResource(R.drawable.rain)
+            "11d" -> rowBinding.rowIcon.setImageResource(R.drawable.thunderstorm)
+            "13d" -> rowBinding.rowIcon.setImageResource(R.drawable.snow)
+            "50d" -> rowBinding.rowIcon.setImageResource(R.drawable.mist)
+        }
+
+//        val url = "https://openweathermap.org/img/wn/" + item.weather[0].icon + "2x.png"
+//        Glide.glideFetch(url, url, rowBinding.rowIcon)
 
 //        Log.d("XXX", "on bind currentindex position "+ position.toString() + " " + item.title)
     }

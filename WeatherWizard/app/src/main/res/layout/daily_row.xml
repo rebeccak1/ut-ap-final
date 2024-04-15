@@ -12,7 +12,7 @@
     effect on selection -->
 
     <TextView
-        android:id="@+id/rowName"
+        android:id="@+id/rowDay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#000000"
@@ -21,11 +21,38 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
+    <TextView
+        android:id="@+id/rowDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rowDay"
+        />
+    <ImageView
+        android:id="@+id/rowIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rowDate"
+        />
+    <TextView
+        android:id="@+id/rowLow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rowIcon"
+        />
 
-    <!--    app:layout_constraintEnd_toStartOf="@+id/rowLength"-->
 
     <TextView
-        android:id="@+id/rowLength"
+        android:id="@+id/rowHigh"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -33,6 +60,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
-    <!--    app:layout_constraintStart_toEndOf="@+id/rowName"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

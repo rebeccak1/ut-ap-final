@@ -67,7 +67,7 @@ class HomeFragment: Fragment() {
         Log.d(javaClass.simpleName, "onViewCreated")
 
         viewModel.observeNetWeatherDaily().observe(viewLifecycleOwner){
-            binding.tb.text = it
+//            binding.tb.text = it
         }
         initAdapter(binding)
 //        initSwipeLayout(binding.swipeRefreshLayout)

@@ -37,7 +37,7 @@ class MainViewModel : ViewModel() {
     private val weatherApi = WeatherApi.create()
     private val repository = WeatherRepository(weatherApi)
 
-    private var netWeatherDaily = MutableLiveData<String>().apply {//List<WeatherDaily
+    private var netWeatherDaily = MutableLiveData<List<WeatherDaily>>().apply {
         // XXX Write me, viewModelScope.launch getSubreddits()
         viewModelScope.launch(
             context = viewModelScope.coroutineContext
@@ -48,7 +48,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun observeNetWeatherDaily(): LiveData<String> {
+    fun observeNetWeatherDaily(): LiveData<List<WeatherDaily>> {
         return netWeatherDaily
     }
 

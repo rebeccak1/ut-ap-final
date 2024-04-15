@@ -21,6 +21,7 @@ interface WeatherApi {
     suspend fun getWeather(@Query("lat") lat: String,
                            @Query("lon") lon: String,
                            @Query("exclude") exclude: String="current,minutely,hourly,alerts",
+                           @Query("units") units: String="imperial",
                            @Query("appid") appid: String="1e014bfae9d273d95b456a0e8b290034") : WeatherDailyResponse
 //@Query("lat") lat: String,
 
