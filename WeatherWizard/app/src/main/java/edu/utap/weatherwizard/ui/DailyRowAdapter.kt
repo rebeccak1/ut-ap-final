@@ -42,8 +42,8 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
 
         rowBinding.rowDay.text = dow
         rowBinding.rowDate.text = calendar.get(java.util.Calendar.DAY_OF_MONTH).toString()
-        rowBinding.rowHigh.text = "%.0f".format(item.temp.max.toString())
-        rowBinding.rowLow.text = item.temp.min.toString().format("%.0f")
+        rowBinding.rowHigh.text = String.format("%2.0f",item.temp.max)
+        rowBinding.rowLow.text = String.format("%2.0f",item.temp.min)
 
         when(item.weather[0].icon){
             "01d" -> rowBinding.rowIcon.setImageResource(R.drawable.clearsky)
