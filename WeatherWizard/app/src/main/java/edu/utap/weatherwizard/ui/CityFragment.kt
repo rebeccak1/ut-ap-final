@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -27,6 +28,9 @@ class CityFragment: Fragment() {
     // XXX initialize viewModel
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var geocoder: Geocoder
+    var latLng: LatLng? = null
+    var city: String? = null
+    var state: String? = null
 
     private var _binding: FragmentCityBinding? = null
 
@@ -34,14 +38,20 @@ class CityFragment: Fragment() {
     private val binding get() = _binding!!
 //    private val args: CityFragmentArgs by navArgs()
 
-    private suspend fun processAddresses(addresses: List<Address>) :LatLng{
+    private suspend fun processAddresses(addresses: List<Address>){
         // XXX Write me.  Note: suspend fun, so withContext is wise.  move the camera
         withContext(Dispatchers.Main) {
             Log.d("XXX", addresses.toString()+" process address")
             if(addresses.isNotEmpty()) {
                 val address = addresses[0]
                 if(address.hasLatitude() && address.hasLongitude()) {
-                    val latLng = LatLng(address.latitude, address.longitude)
+                    latLng = LatLng(address.latitude, address.longitude)
+                    viewModel.setCity(address.locality)
+                    viewModel.setState(address.adminArea)
+                    viewModel.setLatLon(latLng!!)
+
+//                    viewModel.setLat(address.latitude)
+//                    viewModel.setLat(address.longitude)
                 }
             }
 
@@ -75,6 +85,9 @@ class CityFragment: Fragment() {
                     MainScope().launch {
                         if (it.isNotEmpty()) {
                             processAddresses(it)
+
+                            findNavController().popBackStack()
+
                         } else {
                             Snackbar.make(view1,
                                 "No results",
@@ -94,6 +107,7 @@ class CityFragment: Fragment() {
                         if (add.isNotEmpty()) {
 
                             processAddresses(add)
+                            findNavController().popBackStack()
                         } else {
                             Snackbar.make(view1,
                                 "no results",

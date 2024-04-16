@@ -47,6 +47,10 @@ class HomeFragment: Fragment() {
             postRowAdapter.submitList(postList)
             Log.d("XXX", "OBSERVING net weather")
         }
+
+        viewModel.observeCity().observe(viewLifecycleOwner){
+            binding.city.text = it
+        }
     }
 
 //    private fun initSwipeLayout(swipe : SwipeRefreshLayout) {

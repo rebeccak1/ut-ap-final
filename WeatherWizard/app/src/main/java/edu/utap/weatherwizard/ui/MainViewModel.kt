@@ -2,6 +2,7 @@ package edu.utap.weatherwizard.ui
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,8 @@ import edu.utap.weatherwizard.api.WeatherApi
 import edu.utap.weatherwizard.api.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.google.android.gms.maps.model.LatLng
+
 
 class MainViewModel : ViewModel() {
     // It is a real bummer that we need to put this here, but we do because
@@ -37,14 +40,22 @@ class MainViewModel : ViewModel() {
     private val weatherApi = WeatherApi.create()
     private val repository = WeatherRepository(weatherApi)
 
-    private var netWeatherDaily = MutableLiveData<List<WeatherDaily>>().apply {
-        // XXX Write me, viewModelScope.launch getSubreddits()
-        viewModelScope.launch(
-            context = viewModelScope.coroutineContext
-                    + Dispatchers.Default
-        ) {
-            Log.d("XXX", "netweatherdaily fetch")
-            postValue(repository.getWeather("33.44", "-94.04"))
+    private var latlon = MutableLiveData<LatLng>()
+    private var city = MutableLiveData<String>()
+    private var state = MutableLiveData<String>()
+
+//    private var lon = MutableLiveData<Double>()
+
+
+    private var netWeatherDaily = MediatorLiveData<List<WeatherDaily>>().apply {
+        addSource(latlon) {latlon: LatLng ->
+            viewModelScope.launch(
+                context = viewModelScope.coroutineContext
+                        + Dispatchers.Default
+            ) {
+                Log.d("XXX", "netweatherdaily fetch")
+                postValue(repository.getWeather(latlon.latitude.toString(), latlon.longitude.toString()))
+            }
         }
     }
 
@@ -70,6 +81,33 @@ class MainViewModel : ViewModel() {
     fun setCurrentAuthUser(user: User) {
         currentAuthUser = user
     }
+
+//    fun setLon(longitude: Double){
+//        lon.value = longitude
+//    }
+//    fun setLat(latitude: Double){
+//        lat.value = latitude
+//    }
+    fun setLatLon(latLon: LatLng){
+        latlon.value = latLon
+    }
+
+    fun setCity(newcity: String){
+        city.value = newcity
+    }
+
+    fun setState(newstate: String){
+        state.value = newstate
+    }
+
+    fun observeState(): LiveData<String> {
+        return state
+    }
+
+    fun observeCity(): LiveData<String> {
+        return city
+    }
+
     fun removePhotoAt(position: Int) {
         // XXX Deletion requires two different operations.  What are they?
         val cityMeta = getCityMeta(position)
