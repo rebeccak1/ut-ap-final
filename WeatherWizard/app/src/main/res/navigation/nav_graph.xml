@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="edu.utap.weatherwizard.ui.HomeFragment"
+        tools:layout="@layout/fragment_home"
         android:label="Weather Wizard" >
         <action
             android:id="@+id/action_homeFragment_to_oneDayFragment"
@@ -16,15 +18,26 @@
                 app:argType="edu.utap.weatherwizard.api.WeatherDaily"
                 />
         </action>
+        <action
+            android:id="@+id/action_homeFragment_to_cityFragment"
+            app:destination="@id/cityFragment">
+        </action>
         </fragment>
 
     <fragment
         android:id="@+id/oneDayFragment"
         android:name="edu.utap.weatherwizard.ui.OneDayFragment"
-        android:label="OneDay" >
+        tools:layout="@layout/fragment_one_day"
+        android:label="One Day Forecast" >
         <argument
             android:name="daily"
             app:argType="edu.utap.weatherwizard.api.WeatherDaily"
             />
+    </fragment>
+    <fragment
+        android:id="@+id/cityFragment"
+        tools:layout="@layout/fragment_city"
+        android:name="edu.utap.weatherwizard.ui.CityFragment"
+        android:label="City" >
     </fragment>
 </navigation>

@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import androidx.core.view.MenuProvider
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,8 +36,22 @@ class OneDayFragment: Fragment() {
         return binding.root
     }
 
+    private fun initMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Clear menu because we don't want settings icon
+                menu.clear()
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Do nothing
+                return false
+            }
+        }, viewLifecycleOwner)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState) //?
+        initMenu()
 //        viewModel.setTitle("One Post")
 
 //        viewModel.hideActionBarFavorites()
@@ -45,7 +63,7 @@ class OneDayFragment: Fragment() {
         calendar.setTime(date)
 
         val dom = calendar.get(java.util.Calendar.DAY_OF_MONTH).toString()
-        val month = SimpleDateFormat("MMM").format(date)
+        val month = SimpleDateFormat("MMMM").format(date)
 
         binding.dailyDay.text = dow +", " + month + " " + dom
         binding.cloudsEdit.text = args.daily.clouds.toString()

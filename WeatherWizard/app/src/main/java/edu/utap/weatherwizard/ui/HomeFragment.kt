@@ -3,6 +3,10 @@ package edu.utap.weatherwizard.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import androidx.core.view.MenuProvider
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -19,6 +23,7 @@ class HomeFragment: Fragment() {
     private var _binding: FragmentHomeBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
+
 
     // Set up the adapter and recycler view
     private fun initAdapter(binding: FragmentHomeBinding) {
@@ -70,6 +75,10 @@ class HomeFragment: Fragment() {
 //            binding.tb.text = it
         }
         initAdapter(binding)
+        binding.arrowdown.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToCityFragment()
+            findNavController().navigate(action)
+        }
 //        initSwipeLayout(binding.swipeRefreshLayout)
 
 //        viewModel.fetchDone.observe(viewLifecycleOwner) {

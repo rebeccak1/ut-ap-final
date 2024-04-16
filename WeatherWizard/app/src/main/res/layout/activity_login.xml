@@ -18,15 +18,29 @@
         android:padding="24dp"
         android:background="@drawable/custom_edittext">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:textSize="36sp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textColor="@color/blue1"
+        <ImageView
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:src="@drawable/weatherwizard"
+            android:layout_gravity="center"
             />
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/snowflake_sun"
+            android:layout_gravity="center"
+            />
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Login"-->
+<!--            android:textSize="36sp"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textColor="@color/blue1"-->
+<!--            />-->
 
         <EditText
             android:layout_width="match_parent"
@@ -58,6 +72,7 @@
             android:text="Login"
             android:id="@+id/login_button"
             android:textSize="18sp"
+            android:textColor="@color/gold"
             android:layout_marginTop="30dp"
             android:backgroundTint="@color/blue1"
             app:cornerRadius = "20dp" />
@@ -66,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/signUpRedirectText"
-            android:text="Not yet registered? Sign Up"
+            android:text="Not registered? Sign up"
             android:layout_gravity="center"
             android:padding="8dp"
             android:layout_marginTop="10dp"
