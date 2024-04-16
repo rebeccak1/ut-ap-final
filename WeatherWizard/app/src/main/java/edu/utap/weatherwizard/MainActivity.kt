@@ -33,16 +33,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-//                return when (menuItem.itemId) {
-//                    R.id.action_settings -> {
-//                        // XXX Write me
-//                        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-//                        navController.navigate(R.id.settingsFragment)
-//                        return true
-//                    }
-//                    else -> false
-//                }
-                return false
+                return when (menuItem.itemId) {
+                    R.id.action_settings -> {
+                        // XXX Write me
+                        val navController = findNavController(R.id.main_frame)
+                        navController.navigate(R.id.settingsFragment)
+                        return true
+                    }
+                    else -> false
+                }
             }
         })
     }

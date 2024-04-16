@@ -44,6 +44,8 @@ class MainViewModel : ViewModel() {
     private var city = MutableLiveData<String>()
     private var state = MutableLiveData<String>()
 
+    private var unit = "Fahrenheit"
+
 //    private var lon = MutableLiveData<Double>()
 
 
@@ -120,6 +122,14 @@ class MainViewModel : ViewModel() {
     fun getCityMeta(position: Int) : CityMeta {
         val note = cityMetaList.value?.get(position)
         return note!!
+    }
+
+    fun getUnit(): String{
+        return unit
+    }
+
+    fun setUnit(newUnit: String){
+        unit = newUnit
     }
 
     private fun createCityMeta(city: String, uuid : String) {

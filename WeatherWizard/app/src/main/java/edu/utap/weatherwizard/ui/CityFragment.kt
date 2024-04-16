@@ -84,11 +84,14 @@ class CityFragment: Fragment() {
                 geocoder.getFromLocationName(locationName, 1) {
                     MainScope().launch {
                         if (it.isNotEmpty()) {
+                            Log.d("XXX", "geocoding process address")
+
                             processAddresses(it)
 
                             findNavController().popBackStack()
 
                         } else {
+                            Log.d("XXX", "geocoding no results")
                             Snackbar.make(view1,
                                 "No results",
                                 Snackbar.LENGTH_LONG

@@ -36,10 +36,24 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="Austin, TX"
-            android:layout_margin="8dp"
-
+            android:text="Austin"
             />
+            <TextView
+                android:id="@+id/comma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text=", "
+                />
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="Texas"
+                />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dailyRV"

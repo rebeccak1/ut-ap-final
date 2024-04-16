@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="edu.utap.weatherwizard.ui.HomeFragment"
         tools:layout="@layout/fragment_home"
-        android:label="Weather Wizard" >
+        android:label="8 Day Forecast" >
         <action
             android:id="@+id/action_homeFragment_to_oneDayFragment"
             app:destination="@id/oneDayFragment">
@@ -40,4 +40,10 @@
         android:name="edu.utap.weatherwizard.ui.CityFragment"
         android:label="City" >
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="edu.utap.weatherwizard.ui.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
+
 </navigation>
