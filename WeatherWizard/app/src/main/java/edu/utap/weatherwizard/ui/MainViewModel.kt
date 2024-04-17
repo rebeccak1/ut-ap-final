@@ -20,16 +20,7 @@ import com.google.android.gms.maps.model.LatLng
 
 
 class MainViewModel : ViewModel() {
-    // It is a real bummer that we need to put this here, but we do because
-    // it is computed elsewhere, then we launch the camera activity
-    // At that point our fragment can be destroyed, which means this has to be
-    // remembered and restored.  Instead, we put it in the viewModel where we
-    // know it will persist (and we can persist it)
-    private var cityUUID = ""
-    // Only call this from TakePictureWrapper
-    fun takePictureUUID(uuid: String) {
-        cityUUID = uuid
-    }
+
     // LiveData for entire note list, all images
     private var cityMetaList = MutableLiveData<List<CityMeta>>()
 
@@ -43,8 +34,7 @@ class MainViewModel : ViewModel() {
     private var latlon = MutableLiveData<LatLng>()
     private var city = MutableLiveData<String>()
     private var state = MutableLiveData<String>()
-
-    private var unit = "Fahrenheit"
+    private var unit = MutableLiveData<String>()
 
 //    private var lon = MutableLiveData<Double>()
 
@@ -56,9 +46,31 @@ class MainViewModel : ViewModel() {
                         + Dispatchers.Default
             ) {
                 Log.d("XXX", "netweatherdaily fetch")
-                postValue(repository.getWeather(latlon.latitude.toString(), latlon.longitude.toString()))
+                postValue(repository.getWeather(latlon.latitude.toString(), latlon.longitude.toString(), unit.value!!))
             }
         }
+        addSource(unit) {unit: String ->
+            viewModelScope.launch(
+                context = viewModelScope.coroutineContext
+                        + Dispatchers.Default
+            ) {
+                Log.d("XXX", "netweatherdaily fetch")
+                postValue(repository.getWeather(latlon.value?.latitude.toString(), latlon.value?.longitude.toString(), unit))
+            }
+        }
+    }
+
+    init {
+        fetchCityMeta {
+            setHome()
+            repoFetch()
+        }
+    }
+
+    fun repoFetch() {
+        Log.d("XXX", "in repo fetch")
+        val fetch = latlon.value!!
+        latlon.value = fetch
     }
 
     fun observeNetWeatherDaily(): LiveData<List<WeatherDaily>> {
@@ -72,6 +84,24 @@ class MainViewModel : ViewModel() {
         dbHelp.fetchCityMeta() {
             cityMetaList.postValue(it)
             resultListener.invoke()
+        }
+    }
+
+    fun setHome(){
+        if(cityMetaList.value.isNullOrEmpty()){
+            createCityMeta("Austin", "Texas", "Fahrenheit", true,"30.2672", "97.7431")
+
+        }
+        else{
+            for(record in cityMetaList.value!!){
+                if(record.home){
+                    setCity(record.city)
+                    setState(record.state)
+                    setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
+                    setUnit(record.units)
+                    break
+                }
+            }
         }
     }
     fun observeCityMeta(): LiveData<List<CityMeta>> {
@@ -124,33 +154,30 @@ class MainViewModel : ViewModel() {
         return note!!
     }
 
-    fun getUnit(): String{
+    fun observeUnits(): LiveData<String> {
         return unit
     }
 
     fun setUnit(newUnit: String){
-        unit = newUnit
+        unit.value = newUnit
     }
 
-    private fun createCityMeta(city: String, uuid : String) {
+    private fun createCityMeta(city: String, state: String, units: String, home: Boolean, latitude: String, longitude: String) {
         val currentUser = currentAuthUser
         val cityMeta = CityMeta(
             ownerName = currentUser.name,
             ownerUid = currentUser.uid,
-            uuid = uuid,
             city = city,
+            state = state,
+            units = units,
+            favorite = !home,
+            home = home,
+            latitude = latitude,
+            longitude = longitude
         )
         dbHelp.createCityMeta(cityMeta) {
             cityMetaList.postValue(it)
         }
     }
-
-//    fun pictureSuccess() {
-//
-//        createCityMeta(pictureNameByUser, cityUUID)
-//        cityUUID = ""
-//
-//    }
-
 
 }

@@ -51,6 +51,10 @@ class HomeFragment: Fragment() {
         viewModel.observeCity().observe(viewLifecycleOwner){
             binding.city.text = it
         }
+
+        viewModel.observeState().observe(viewLifecycleOwner){
+            binding.state.text = it
+        }
     }
 
 //    private fun initSwipeLayout(swipe : SwipeRefreshLayout) {

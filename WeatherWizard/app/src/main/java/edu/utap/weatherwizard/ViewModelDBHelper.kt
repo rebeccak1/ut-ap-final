@@ -7,7 +7,7 @@ import edu.utap.weatherwizard.model.CityMeta
 
 class ViewModelDBHelper {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val rootCollection = "allPhotos"
+    private val rootCollection = "allCityMeta"
 
     // If we want to listen for real time updates use this
     // .addSnapshotListener { querySnapshot, firebaseFirestoreException ->

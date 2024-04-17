@@ -36,7 +36,6 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="Austin"
             />
             <TextView
                 android:id="@+id/comma"
@@ -52,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="Texas"
                 />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView

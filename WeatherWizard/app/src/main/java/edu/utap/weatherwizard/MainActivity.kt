@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
 //        activityMainBinding.toolbar.setupWithNavController(navController, appBarConfiguration)
+
     }
 
 //    override fun onSupportNavigateUp(): Boolean {

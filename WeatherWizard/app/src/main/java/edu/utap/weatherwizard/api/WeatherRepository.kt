@@ -12,10 +12,14 @@ class WeatherRepository(private val weatherApi: WeatherApi) {
 //        return posts.toList()
 //    }
 
-    suspend fun getWeather(lat: String, lon: String): List<WeatherDaily> {
+    suspend fun getWeather(lat: String, lon: String, unit: String): List<WeatherDaily> {
         val response : WeatherApi.WeatherDailyResponse?
-
-        response = weatherApi.getWeather(lat,lon)
+        val units = when(unit){
+            "Fahrenheit"->"imperial"
+            "Celsius"->"metric"
+            else->"imperial"
+        }
+        response = weatherApi.getWeather(lat, lon, units)
 
         return response.daily
 //        return unpackPosts(response)

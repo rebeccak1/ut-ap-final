@@ -20,8 +20,8 @@ interface WeatherApi {
     @GET("/data/3.0/onecall")
     suspend fun getWeather(@Query("lat") lat: String,
                            @Query("lon") lon: String,
+                           @Query("units") units: String,
                            @Query("exclude") exclude: String="current,minutely,hourly,alerts",
-                           @Query("units") units: String="imperial",
                            @Query("appid") appid: String="1e014bfae9d273d95b456a0e8b290034") : WeatherDailyResponse
 //@Query("lat") lat: String,
 
