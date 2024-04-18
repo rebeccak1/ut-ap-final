@@ -79,8 +79,11 @@ class HomeFragment: Fragment() {
 //        viewModel.showActionBarFavorites()
         Log.d(javaClass.simpleName, "onViewCreated")
 
-        viewModel.observeNetWeatherDaily().observe(viewLifecycleOwner){
-//            binding.tb.text = it
+        viewModel.observeCity().observe(viewLifecycleOwner){
+            binding.city.text = it
+        }
+        viewModel.observeState().observe(viewLifecycleOwner){
+            binding.state.text = it
         }
         initAdapter(binding)
         binding.arrowdown.setOnClickListener {

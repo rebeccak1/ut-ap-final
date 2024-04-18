@@ -17,32 +17,32 @@ class ViewModelDBHelper {
             .limit(100)
             .get()
             .addOnSuccessListener { result ->
-                Log.d(javaClass.simpleName, "allNotes fetch ${result!!.documents.size}")
+                Log.d("XXX", "allNotes fetch ${result!!.documents.size}")
                 // NB: This is done on a background thread
                 resultListener(result.documents.mapNotNull {
                     it.toObject(CityMeta::class.java)
                 })
             }
             .addOnFailureListener {
-                Log.d(javaClass.simpleName, "allNotes fetch FAILED ", it)
+                Log.d("XXX", "allNotes fetch FAILED ", it)
                 resultListener(listOf())
             }
     }
     /////////////////////////////////////////////////////////////
     // Interact with Firestore db
     // https://firebase.google.com/docs/firestore/query-data/order-limit-data
-    fun fetchCityMeta(
+    fun fetchCityMeta(user: String,
         resultListener: (List<CityMeta>) -> Unit
     ) {
         // XXX Write me and use limitAndGet
-
-        val query = db.collection(rootCollection).orderBy("city", Query.Direction.ASCENDING)
+        Log.d("XXX", "fetching in view model")
+        val query = db.collection(rootCollection).orderBy("city", Query.Direction.ASCENDING).whereEqualTo("ownerUid", user)
         limitAndGet(query, resultListener)
 
     }
 
     // https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document
-    fun createCityMeta(
+    fun createCityMeta(user: String,
         cityMeta: CityMeta,
         resultListener: (List<CityMeta>)->Unit
     ) {
@@ -50,7 +50,7 @@ class ViewModelDBHelper {
         db.collection(rootCollection)
             .add(cityMeta)
             .addOnSuccessListener {
-                fetchCityMeta(resultListener)
+                fetchCityMeta(user, resultListener)
             }
             .addOnFailureListener { e->
                 Log.d(javaClass.simpleName, "Note create FAILED ")
@@ -60,7 +60,7 @@ class ViewModelDBHelper {
     }
 
     // https://firebase.google.com/docs/firestore/manage-data/delete-data#delete_documents
-    fun removeCityMeta(
+    fun removeCityMeta(user: String,
         cityMeta: CityMeta,
         resultListener: (List<CityMeta>)->Unit
     ) {
@@ -73,7 +73,7 @@ class ViewModelDBHelper {
                     javaClass.simpleName,
                     "Note delete  id: ${cityMeta.firestoreID}"
                 )
-                fetchCityMeta(resultListener)
+                fetchCityMeta(user, resultListener)
             }
             .addOnFailureListener { e->
                 Log.d(javaClass.simpleName, "Note deleting FAILED ")

@@ -48,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
                     .show()
             }
             else{
+                binding.progressbar.visibility = View.VISIBLE
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
                     Toast.makeText(
                         applicationContext,
@@ -63,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
                     intent.putExtra("useremail", it.user?.email)
                     intent.putExtra("userid", it.user?.uid)
 
+                    binding.progressbar.visibility = View.INVISIBLE
 
                     startActivity(intent)
                     finish()

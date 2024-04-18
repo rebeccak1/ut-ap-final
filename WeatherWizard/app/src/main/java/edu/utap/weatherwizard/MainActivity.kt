@@ -62,6 +62,12 @@ class MainActivity : AppCompatActivity() {
             val user = User(username, useremail, uuid!!)
             viewModel.setCurrentAuthUser(user)
             Log.d("XXX", username.toString() +" " + useremail.toString() +" " + uuid.toString())
+
+            viewModel.fetchCityMeta() {
+                viewModel.setHome()
+//                viewModel.repoFetch()
+                Log.d("XXX","city meta posted size " + viewModel.observeCityMeta().value?.size.toString())
+            }
         }
 
 

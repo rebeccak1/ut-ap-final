@@ -61,10 +61,10 @@ class MainViewModel : ViewModel() {
     }
 
     init {
-        fetchCityMeta {
-            setHome()
-            repoFetch()
-        }
+//        fetchCityMeta {
+//            setHome()
+//            repoFetch()
+//        }
     }
 
     fun repoFetch() {
@@ -81,24 +81,33 @@ class MainViewModel : ViewModel() {
     /////////////////////////////////////////////////////////////
     // Notes, memory cache and database interaction
     fun fetchCityMeta(resultListener:()->Unit) {
-        dbHelp.fetchCityMeta() {
-            cityMetaList.postValue(it)
+        Log.d("XXX", "view model fetching city meta")
+        dbHelp.fetchCityMeta(currentAuthUser.uid) {
+
+            cityMetaList.value = it
+            Log.d("XXX", "view model fetching city meta: posting")
+
             resultListener.invoke()
         }
     }
 
     fun setHome(){
         if(cityMetaList.value.isNullOrEmpty()){
-            createCityMeta("Austin", "Texas", "Fahrenheit", true,"30.2672", "97.7431")
+            Log.d("XXX", "in set home city meta empty")
+            createCityMeta("Austin", "Texas", "Fahrenheit", true,"30.2672", "-97.7431")
 
         }
         else{
+            Log.d("XXX", "in set home city meta NOT empty")
+
             for(record in cityMetaList.value!!){
                 if(record.home){
                     setCity(record.city)
                     setState(record.state)
                     setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
                     setUnit(record.units)
+                    Log.d("XXX", "in set home, home record found")
+
                     break
                 }
             }
@@ -143,7 +152,7 @@ class MainViewModel : ViewModel() {
     fun removePhotoAt(position: Int) {
         // XXX Deletion requires two different operations.  What are they?
         val cityMeta = getCityMeta(position)
-        dbHelp.removeCityMeta(cityMeta){
+        dbHelp.removeCityMeta(currentAuthUser.uid, cityMeta){
             cityMetaList.postValue(it)
         }
     }
@@ -175,7 +184,7 @@ class MainViewModel : ViewModel() {
             latitude = latitude,
             longitude = longitude
         )
-        dbHelp.createCityMeta(cityMeta) {
+        dbHelp.createCityMeta(currentUser.uid, cityMeta) {
             cityMetaList.postValue(it)
         }
     }

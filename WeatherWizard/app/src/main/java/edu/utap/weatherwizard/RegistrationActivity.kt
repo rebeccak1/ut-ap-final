@@ -72,7 +72,7 @@ class RegistrationActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                    binding.progressbar.visibility = View.GONE
+                    binding.progressbar.visibility = View.INVISIBLE
 
                 }
             }
