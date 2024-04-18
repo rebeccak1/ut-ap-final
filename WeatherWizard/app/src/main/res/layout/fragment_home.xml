@@ -52,6 +52,19 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 />
+            <ImageView
+                android:id="@+id/homeIcon"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_home_24"
+                />
+            <ImageView
+                android:id="@+id/favIcon"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dailyRV"

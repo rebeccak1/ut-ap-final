@@ -66,15 +66,13 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
 
     class WeatherDailyDiff : DiffUtil.ItemCallback<WeatherDaily>() {
         override fun areItemsTheSame(oldItem: WeatherDaily, newItem: WeatherDaily): Boolean {
-//            return oldItem.key == newItem.key
-            return true
+            return (oldItem.dt == newItem.dt) && (oldItem.weather[0] == newItem.weather[0])
+                    && (oldItem.temp.max == oldItem.temp.max) && (oldItem.temp.min == oldItem.temp.min)
         }
         override fun areContentsTheSame(oldItem: WeatherDaily, newItem: WeatherDaily): Boolean {
-//            return RedditPost.spannableStringsEqual(oldItem.title, newItem.title) &&
-//                    RedditPost.spannableStringsEqual(oldItem.selfText, newItem.selfText) &&
-//                    RedditPost.spannableStringsEqual(oldItem.publicDescription, newItem.publicDescription) &&
-//                    RedditPost.spannableStringsEqual(oldItem.displayName, newItem.displayName)
-            return true
+            return (oldItem.dt == newItem.dt) && (oldItem.weather[0] == newItem.weather[0])
+                    && (oldItem.temp.max == oldItem.temp.max) && (oldItem.temp.min == oldItem.temp.min)
+
         }
     }
 }

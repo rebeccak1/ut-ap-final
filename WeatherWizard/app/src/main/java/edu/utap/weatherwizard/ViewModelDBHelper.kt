@@ -59,6 +59,26 @@ class ViewModelDBHelper {
 
     }
 
+    fun updateCityMeta(user: String,
+                       cityMeta: CityMeta, newHome: Boolean,
+                       resultListener: (List<CityMeta>)->Unit
+    ){
+        db.collection(rootCollection)
+            .document(cityMeta.firestoreID)
+            .update("home", newHome)
+            .addOnSuccessListener {
+                Log.d(
+                    javaClass.simpleName,
+                    "Note update id: ${cityMeta.firestoreID}"
+                )
+                fetchCityMeta(user, resultListener)
+            }
+            .addOnFailureListener { e->
+                Log.d(javaClass.simpleName, "Note updating FAILED ")
+                Log.w(javaClass.simpleName, "Error adding document", e)
+            }
+    }
+
     // https://firebase.google.com/docs/firestore/manage-data/delete-data#delete_documents
     fun removeCityMeta(user: String,
         cityMeta: CityMeta,

@@ -66,6 +66,7 @@
             android:hint="Password"
             android:drawablePadding="8dp"
             android:textColor="@color/black"
+            android:inputType = "textPassword"
             />
 
         <LinearLayout

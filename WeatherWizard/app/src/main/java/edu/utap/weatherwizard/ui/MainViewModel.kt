@@ -35,7 +35,9 @@ class MainViewModel : ViewModel() {
     private var city = MutableLiveData<String>()
     private var state = MutableLiveData<String>()
     private var unit = MutableLiveData<String>()
-
+    private var favorite = MutableLiveData<Boolean>()
+    private var home = MutableLiveData<Boolean>()
+    private var pos = MutableLiveData<Int>()
 //    private var lon = MutableLiveData<Double>()
 
 
@@ -94,18 +96,19 @@ class MainViewModel : ViewModel() {
     fun setHome(){
         if(cityMetaList.value.isNullOrEmpty()){
             Log.d("XXX", "in set home city meta empty")
-            createCityMeta("Austin", "Texas", "Fahrenheit", true,"30.2672", "-97.7431")
+            createCityMeta("Austin", "Texas", "Fahrenheit", true, "30.2672", "-97.7431")
 
         }
         else{
             Log.d("XXX", "in set home city meta NOT empty")
-
-            for(record in cityMetaList.value!!){
+            for(c in 0..cityMetaList.value!!.size) {
+                val record = cityMetaList.value!![c]
                 if(record.home){
                     setCity(record.city)
                     setState(record.state)
                     setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
                     setUnit(record.units)
+                    setPos(c)
                     Log.d("XXX", "in set home, home record found")
 
                     break
@@ -117,18 +120,16 @@ class MainViewModel : ViewModel() {
         return cityMetaList
     }
 
+    fun observeLatLng(): LiveData<LatLng> {
+        return latlon
+    }
+
 
     // MainActivity gets updates on this via live data and informs view model
     fun setCurrentAuthUser(user: User) {
         currentAuthUser = user
     }
 
-//    fun setLon(longitude: Double){
-//        lon.value = longitude
-//    }
-//    fun setLat(latitude: Double){
-//        lat.value = latitude
-//    }
     fun setLatLon(latLon: LatLng){
         latlon.value = latLon
     }
@@ -137,23 +138,60 @@ class MainViewModel : ViewModel() {
         city.value = newcity
     }
 
+    fun setPos(newPos: Int){
+        pos.value = newPos
+    }
+
     fun setState(newstate: String){
         state.value = newstate
     }
 
+    fun setHomeBool(newhome: Boolean){
+        home.value = newhome
+    }
+
+    fun setFavBool(newfav: Boolean){
+        favorite.value = newfav
+    }
+
+
     fun observeState(): LiveData<String> {
         return state
+    }
+
+    fun observeFavorite(): LiveData<Boolean> {
+        return favorite
+    }
+
+    fun observeHome(): LiveData<Boolean> {
+        return home
     }
 
     fun observeCity(): LiveData<String> {
         return city
     }
 
-    fun removePhotoAt(position: Int) {
-        // XXX Deletion requires two different operations.  What are they?
+    fun removeCityMeta(position: Int) {
         val cityMeta = getCityMeta(position)
         dbHelp.removeCityMeta(currentAuthUser.uid, cityMeta){
             cityMetaList.postValue(it)
+        }
+    }
+
+    fun updateList(fav: Boolean){
+        if(fav) {
+            createCityMeta(
+                city.value!!,
+                state.value!!,
+                unit.value!!,
+                home.value!!,
+                latlon.value?.latitude.toString(),
+                latlon.value?.longitude.toString()
+            )
+            //update position
+        }
+        else{
+            removeCityMeta(pos.value!!)
         }
     }
 
@@ -171,7 +209,7 @@ class MainViewModel : ViewModel() {
         unit.value = newUnit
     }
 
-    private fun createCityMeta(city: String, state: String, units: String, home: Boolean, latitude: String, longitude: String) {
+    fun createCityMeta(city: String, state: String, units: String, home: Boolean, latitude: String, longitude: String) {
         val currentUser = currentAuthUser
         val cityMeta = CityMeta(
             ownerName = currentUser.name,

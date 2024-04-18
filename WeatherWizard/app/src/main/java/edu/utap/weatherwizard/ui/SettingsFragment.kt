@@ -2,6 +2,7 @@ package edu.utap.weatherwizard.ui
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -74,8 +75,10 @@ class SettingsFragment : Fragment() {
         }
 
         binding.okBut.setOnClickListener {
-            if(unit != currentUnit)
+            if(unit != currentUnit) {
+                Log.d("XXX", "setting units to $unit")
                 viewModel.setUnit(unit!!)
+            }
 
             findNavController().popBackStack()
         }

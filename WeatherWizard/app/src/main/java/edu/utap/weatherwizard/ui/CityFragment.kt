@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.databinding.FragmentCityBinding
@@ -49,12 +50,38 @@ class CityFragment: Fragment() {
                     viewModel.setCity(address.locality)
                     viewModel.setState(address.adminArea)
                     viewModel.setLatLon(latLng!!)
+                    viewModel.setHomeBool(false)
+                    viewModel.setFavBool(false)
+                    viewModel.setPos(-1)
 
 //                    viewModel.setLat(address.latitude)
 //                    viewModel.setLat(address.longitude)
                 }
             }
 
+        }
+    }
+
+    private fun initAdapter(binding: FragmentCityBinding) {
+        val postRowAdapter = CityRowAdapter(viewModel) {
+//            Log.d("OnePost",
+//                String.format("OnePost title %s",
+//                    if (it.title.length > 32)
+//                        it.title.substring(0, 31) + "..."
+//                    else it.title))
+//            Log.d("doOnePost", "image ${it.imageURL}")
+            // XXX Write me
+//            val action = HomeFragmentDirections.actionHomeFragmentToOneDayFragment(it)
+//            findNavController().navigate(action)
+
+        }
+        // XXX Write me, observe posts
+        val rv = binding.cityRV
+        rv.adapter = postRowAdapter
+        rv.layoutManager = LinearLayoutManager(requireContext())
+        viewModel.observeCityMeta().observe(viewLifecycleOwner) { postList ->
+            postRowAdapter.submitList(postList)
+            Log.d("XXX", "OBSERVING city meta")
         }
     }
 
@@ -72,7 +99,7 @@ class CityFragment: Fragment() {
 //        viewModel.setTitle("One Post")
 
 //        viewModel.hideActionBarFavorites()
-
+        initAdapter(binding)
         geocoder = Geocoder(requireContext())
         binding.goBut.setOnClickListener {
             view1->
