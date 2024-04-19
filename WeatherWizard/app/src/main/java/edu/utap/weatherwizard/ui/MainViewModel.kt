@@ -38,19 +38,20 @@ class MainViewModel : ViewModel() {
     private var favorite = MutableLiveData<Boolean>()
     private var home = MutableLiveData<Boolean>()
     private var pos = MutableLiveData<Int>()
-//    private var lon = MutableLiveData<Double>()
+
+    private var currentCityMeta = MutableLiveData<CityMeta>()
 
 
     private var netWeatherDaily = MediatorLiveData<List<WeatherDaily>>().apply {
-        addSource(latlon) {latlon: LatLng ->
-            viewModelScope.launch(
-                context = viewModelScope.coroutineContext
-                        + Dispatchers.Default
-            ) {
-                Log.d("XXX", "netweatherdaily fetch")
-                postValue(repository.getWeather(latlon.latitude.toString(), latlon.longitude.toString(), unit.value!!))
-            }
-        }
+//        addSource(latlon) {latlon: LatLng ->
+//            viewModelScope.launch(
+//                context = viewModelScope.coroutineContext
+//                        + Dispatchers.Default
+//            ) {
+//                Log.d("XXX", "netweatherdaily fetch")
+//                postValue(repository.getWeather(latlon.latitude.toString(), latlon.longitude.toString(), unit.value!!))
+//            }
+//        }
         addSource(unit) {unit: String ->
             viewModelScope.launch(
                 context = viewModelScope.coroutineContext
@@ -58,6 +59,16 @@ class MainViewModel : ViewModel() {
             ) {
                 Log.d("XXX", "netweatherdaily fetch")
                 postValue(repository.getWeather(latlon.value?.latitude.toString(), latlon.value?.longitude.toString(), unit))
+            }
+        }
+        addSource(currentCityMeta){
+            viewModelScope.launch (
+                context = viewModelScope.coroutineContext
+                        + Dispatchers.Default
+            ) {
+               Log.d("XXX", "netweatherdaily fetch")
+               postValue(repository.getWeather(currentCityMeta.value?.latitude.toString(), currentCityMeta.value?.longitude.toString(), unit.value!!))
+
             }
         }
     }
@@ -96,14 +107,15 @@ class MainViewModel : ViewModel() {
     fun setHome(){
         if(cityMetaList.value.isNullOrEmpty()){
             Log.d("XXX", "in set home city meta empty")
-            createCityMeta("Austin", "Texas", "Fahrenheit", true, "30.2672", "-97.7431")
-
+            var cm = createCityMeta("Austin", "Texas", "Fahrenheit", true, "30.2672", "-97.7431")
+            setCityMeta(cm)
         }
         else{
             Log.d("XXX", "in set home city meta NOT empty")
             for(c in 0..cityMetaList.value!!.size) {
                 val record = cityMetaList.value!![c]
                 if(record.home){
+                    setCityMeta(record)
                     setCity(record.city)
                     setState(record.state)
                     setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
@@ -163,6 +175,10 @@ class MainViewModel : ViewModel() {
         return favorite
     }
 
+    fun observeCurrentCM(): LiveData<CityMeta>{
+        return currentCityMeta
+    }
+
     fun observeHome(): LiveData<Boolean> {
         return home
     }
@@ -171,27 +187,27 @@ class MainViewModel : ViewModel() {
         return city
     }
 
+    fun remove(){
+        var position = 0
+        for(i in 0..< cityMetaList.value!!.size){
+            val cm = cityMetaList.value!![i]
+            if(cm.equals(currentCityMeta)){
+                Log.d("XXX", "removing position found")
+                position = i
+                break
+            }
+        }
+        removeCityMeta(position)
+    }
+
+    fun setCityMeta(cm: CityMeta){
+        currentCityMeta.value = cm
+    }
+
     fun removeCityMeta(position: Int) {
         val cityMeta = getCityMeta(position)
         dbHelp.removeCityMeta(currentAuthUser.uid, cityMeta){
             cityMetaList.postValue(it)
-        }
-    }
-
-    fun updateList(fav: Boolean){
-        if(fav) {
-            createCityMeta(
-                city.value!!,
-                state.value!!,
-                unit.value!!,
-                home.value!!,
-                latlon.value?.latitude.toString(),
-                latlon.value?.longitude.toString()
-            )
-            //update position
-        }
-        else{
-            removeCityMeta(pos.value!!)
         }
     }
 
@@ -209,7 +225,7 @@ class MainViewModel : ViewModel() {
         unit.value = newUnit
     }
 
-    fun createCityMeta(city: String, state: String, units: String, home: Boolean, latitude: String, longitude: String) {
+    fun createCityMeta(city: String, state: String, units: String, home: Boolean, latitude: String, longitude: String): CityMeta {
         val currentUser = currentAuthUser
         val cityMeta = CityMeta(
             ownerName = currentUser.name,
@@ -225,6 +241,7 @@ class MainViewModel : ViewModel() {
         dbHelp.createCityMeta(currentUser.uid, cityMeta) {
             cityMetaList.postValue(it)
         }
+        return cityMeta
     }
 
 }

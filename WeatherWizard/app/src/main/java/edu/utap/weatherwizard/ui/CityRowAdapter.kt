@@ -9,10 +9,10 @@ import edu.utap.weatherwizard.databinding.CityRowBinding
 import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.model.CityMeta
 import com.google.android.gms.maps.model.LatLng
-
+import androidx.navigation.NavController
 
 class CityRowAdapter(private val viewModel: MainViewModel,
-                     private val navigateToOneDay: (CityMeta)->Unit )
+                     private val navController: NavController )
     : ListAdapter<CityMeta, CityRowAdapter.VH>(CityMetaDiff()) {
 
     inner class VH(val cityRowBinding: CityRowBinding)
@@ -21,16 +21,22 @@ class CityRowAdapter(private val viewModel: MainViewModel,
             //fix these to navigate 8 day
             cityRowBinding.rowCity.setOnClickListener {
                 val cityMeta = getItem(bindingAdapterPosition)
-                viewModel.setCity(cityMeta.city)
-                viewModel.setState(cityMeta.state)
-                viewModel.setLatLon(LatLng(cityMeta.latitude.toDouble(), cityMeta.longitude.toDouble()))
-
+                viewModel.setCityMeta(cityMeta)
+//                viewModel.setCity(cityMeta.city)
+//                viewModel.setState(cityMeta.state)
+//                viewModel.setLatLon(LatLng(cityMeta.latitude.toDouble(), cityMeta.longitude.toDouble()))
+                navController.popBackStack()
             }
             cityRowBinding.rowComma.setOnClickListener {
-                navigateToOneDay(getItem(bindingAdapterPosition))
+                val cityMeta = getItem(bindingAdapterPosition)
+                viewModel.setCityMeta(cityMeta)
+                navController.popBackStack()
+
             }
             cityRowBinding.rowState.setOnClickListener {
-                navigateToOneDay(getItem(bindingAdapterPosition))
+                val cityMeta = getItem(bindingAdapterPosition)
+                viewModel.setCityMeta(cityMeta)
+                navController.popBackStack()
             }
             cityRowBinding.rowIcon.setOnClickListener {
                 val cityMeta = getItem(bindingAdapterPosition)

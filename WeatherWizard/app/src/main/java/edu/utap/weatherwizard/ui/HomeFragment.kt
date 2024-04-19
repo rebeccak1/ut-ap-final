@@ -51,29 +51,46 @@ class HomeFragment: Fragment() {
             Log.d("XXX", "OBSERVING net weather")
         }
 
-        viewModel.observeCity().observe(viewLifecycleOwner){
-            binding.city.text = it
-        }
-
-        viewModel.observeState().observe(viewLifecycleOwner){
-            binding.state.text = it
-        }
-        viewModel.observeFavorite().observe(viewLifecycleOwner){
-            if(it){
+        viewModel.observeCurrentCM().observe(viewLifecycleOwner){
+            binding.city.text = it.city
+            binding.state.text = it.state
+            if(it.favorite){
                 binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
             }
             else{
                 binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             }
-        }
-        viewModel.observeHome().observe(viewLifecycleOwner){
-            if(it){
+            if(it.home){
                 binding.homeIcon.setImageResource(R.drawable.baseline_home_24)
             }
             else{
                 binding.homeIcon.setImageResource(R.drawable.outline_home_24)
             }
         }
+
+//        viewModel.observeCity().observe(viewLifecycleOwner){
+//            binding.city.text = it
+//        }
+//
+//        viewModel.observeState().observe(viewLifecycleOwner){
+//            binding.state.text = it
+//        }
+//        viewModel.observeFavorite().observe(viewLifecycleOwner){
+//            if(it){
+//                binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
+//            }
+//            else{
+//                binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+//            }
+//        }
+//        viewModel.observeHome().observe(viewLifecycleOwner){
+//            if(it){
+//                binding.homeIcon.setImageResource(R.drawable.baseline_home_24)
+//            }
+//            else{
+//                binding.homeIcon.setImageResource(R.drawable.outline_home_24)
+//            }
+//        }
 
     }
 
@@ -106,21 +123,23 @@ class HomeFragment: Fragment() {
         }
 
         binding.favIcon.setOnClickListener {
-            val home = viewModel.observeHome().value
-            val fav = viewModel.observeFavorite().value
-
+//            val home = viewModel.observeHome().value
+//            val fav = viewModel.observeCurrentCM().value?.favorite
+            val cm = viewModel.observeCurrentCM().value
+            val home = cm?.home
+            val fav = cm?.favorite
             if(!home!!){
                 if(!fav!!){
                     val latlng = viewModel.observeLatLng().value
                     binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
-                    viewModel.createCityMeta(viewModel.observeCity().value!!,
+                    val cm = viewModel.createCityMeta(viewModel.observeCity().value!!,
                         viewModel.observeState().value!!, viewModel.observeUnits().value!!,
                         false, latlng?.latitude.toString(), latlng?.longitude.toString())
+                    viewModel.setCityMeta(cm)
                 }
                 else{
                     binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-                    viewModel.updateList(false)
-
+                    viewModel.remove()
                 }
             }
         }

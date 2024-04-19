@@ -63,18 +63,7 @@ class CityFragment: Fragment() {
     }
 
     private fun initAdapter(binding: FragmentCityBinding) {
-        val postRowAdapter = CityRowAdapter(viewModel) {
-//            Log.d("OnePost",
-//                String.format("OnePost title %s",
-//                    if (it.title.length > 32)
-//                        it.title.substring(0, 31) + "..."
-//                    else it.title))
-//            Log.d("doOnePost", "image ${it.imageURL}")
-            // XXX Write me
-//            val action = HomeFragmentDirections.actionHomeFragmentToOneDayFragment(it)
-//            findNavController().navigate(action)
-
-        }
+        val postRowAdapter = CityRowAdapter(viewModel, findNavController())
         // XXX Write me, observe posts
         val rv = binding.cityRV
         rv.adapter = postRowAdapter
