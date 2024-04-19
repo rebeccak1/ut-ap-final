@@ -46,16 +46,17 @@ class CityFragment: Fragment() {
             if(addresses.isNotEmpty()) {
                 val address = addresses[0]
                 if(address.hasLatitude() && address.hasLongitude()) {
-                    latLng = LatLng(address.latitude, address.longitude)
-                    viewModel.setCity(address.locality)
-                    viewModel.setState(address.adminArea)
-                    viewModel.setLatLon(latLng!!)
-                    viewModel.setHomeBool(false)
+                    var cm = viewModel.createCityMeta(address.locality, address.adminArea, "Fahrenheit", false,false, address.latitude.toString(), address.longitude.toString())
                     viewModel.setFavBool(false)
-                    viewModel.setPos(-1)
+                    viewModel.setCityMeta(cm)
+//                    latLng = LatLng(address.latitude, address.longitude)
+//                    viewModel.setCity(address.locality)
+//                    viewModel.setState(address.adminArea)
+//                    viewModel.setLatLon(latLng!!)
+//                    viewModel.setHomeBool(false)
+//                    viewModel.setFavBool(false)
+//                    viewModel.setPos(-1)
 
-//                    viewModel.setLat(address.latitude)
-//                    viewModel.setLat(address.longitude)
                 }
             }
 

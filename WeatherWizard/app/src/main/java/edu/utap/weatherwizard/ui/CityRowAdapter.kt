@@ -1,5 +1,6 @@
 package edu.utap.weatherwizard.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -21,6 +22,7 @@ class CityRowAdapter(private val viewModel: MainViewModel,
             //fix these to navigate 8 day
             cityRowBinding.rowCity.setOnClickListener {
                 val cityMeta = getItem(bindingAdapterPosition)
+                Log.d("XXX", "clicked on city meta with city " + cityMeta.city)
                 viewModel.setCityMeta(cityMeta)
 //                viewModel.setCity(cityMeta.city)
 //                viewModel.setState(cityMeta.state)

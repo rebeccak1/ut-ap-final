@@ -52,15 +52,15 @@ class MainViewModel : ViewModel() {
 //                postValue(repository.getWeather(latlon.latitude.toString(), latlon.longitude.toString(), unit.value!!))
 //            }
 //        }
-        addSource(unit) {unit: String ->
-            viewModelScope.launch(
-                context = viewModelScope.coroutineContext
-                        + Dispatchers.Default
-            ) {
-                Log.d("XXX", "netweatherdaily fetch")
-                postValue(repository.getWeather(latlon.value?.latitude.toString(), latlon.value?.longitude.toString(), unit))
-            }
-        }
+//        addSource(unit) {unit: String ->
+//            viewModelScope.launch(
+//                context = viewModelScope.coroutineContext
+//                        + Dispatchers.Default
+//            ) {
+//                Log.d("XXX", "netweatherdaily fetch")
+//                postValue(repository.getWeather(latlon.value?.latitude.toString(), latlon.value?.longitude.toString(), unit))
+//            }
+//        }
         addSource(currentCityMeta){
             viewModelScope.launch (
                 context = viewModelScope.coroutineContext
@@ -107,25 +107,32 @@ class MainViewModel : ViewModel() {
     fun setHome(){
         if(cityMetaList.value.isNullOrEmpty()){
             Log.d("XXX", "in set home city meta empty")
-            var cm = createCityMeta("Austin", "Texas", "Fahrenheit", true, "30.2672", "-97.7431")
+            var cm = createCityMeta("Austin", "Texas", "Fahrenheit", false, true, "30.2672", "-97.7431")
+            setUnit("Fahrenheit")
+            saveCityMeta(cm)
             setCityMeta(cm)
+            return
         }
         else{
             Log.d("XXX", "in set home city meta NOT empty")
-            for(c in 0..cityMetaList.value!!.size) {
+            for(c in 0..<cityMetaList.value!!.size) {
                 val record = cityMetaList.value!![c]
                 if(record.home){
+                    setUnit("Fahrenheit")
                     setCityMeta(record)
-                    setCity(record.city)
-                    setState(record.state)
-                    setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
-                    setUnit(record.units)
-                    setPos(c)
+//                    setCity(record.city)
+//                    setState(record.state)
+//                    setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
+//                    setPos(c)
                     Log.d("XXX", "in set home, home record found")
 
-                    break
+                    return
                 }
             }
+            var cm = createCityMeta("Austin", "Texas", "Fahrenheit", false,true, "30.2672", "-97.7431")
+            setUnit("Fahrenheit")
+            saveCityMeta(cm)
+            setCityMeta(cm)
         }
     }
     fun observeCityMeta(): LiveData<List<CityMeta>> {
@@ -191,12 +198,13 @@ class MainViewModel : ViewModel() {
         var position = 0
         for(i in 0..< cityMetaList.value!!.size){
             val cm = cityMetaList.value!![i]
-            if(cm.equals(currentCityMeta)){
+            if(cm.equals(currentCityMeta.value)){
                 Log.d("XXX", "removing position found")
                 position = i
                 break
             }
         }
+        Log.d("XXX", "at end of remove")
         removeCityMeta(position)
     }
 
@@ -225,7 +233,14 @@ class MainViewModel : ViewModel() {
         unit.value = newUnit
     }
 
-    fun createCityMeta(city: String, state: String, units: String, home: Boolean, latitude: String, longitude: String): CityMeta {
+    fun saveCityMeta(cityMeta: CityMeta){
+        val currentUser = currentAuthUser
+        dbHelp.createCityMeta(currentUser.uid, cityMeta) {
+            cityMetaList.postValue(it)
+        }
+    }
+
+    fun createCityMeta(city: String, state: String, units: String, favorite: Boolean, home: Boolean, latitude: String, longitude: String): CityMeta {
         val currentUser = currentAuthUser
         val cityMeta = CityMeta(
             ownerName = currentUser.name,
@@ -233,14 +248,12 @@ class MainViewModel : ViewModel() {
             city = city,
             state = state,
             units = units,
-            favorite = !home,
+            favorite = favorite,
             home = home,
             latitude = latitude,
             longitude = longitude
         )
-        dbHelp.createCityMeta(currentUser.uid, cityMeta) {
-            cityMetaList.postValue(it)
-        }
+
         return cityMeta
     }
 

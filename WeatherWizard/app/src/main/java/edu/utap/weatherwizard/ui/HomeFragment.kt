@@ -130,15 +130,22 @@ class HomeFragment: Fragment() {
             val fav = cm?.favorite
             if(!home!!){
                 if(!fav!!){
-                    val latlng = viewModel.observeLatLng().value
+                    Log.d("XXX", "home fragment clicked on city " + cm.state)
+                    Log.d("XXX", "not a favorite")
                     binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
-                    val cm = viewModel.createCityMeta(viewModel.observeCity().value!!,
-                        viewModel.observeState().value!!, viewModel.observeUnits().value!!,
-                        false, latlng?.latitude.toString(), latlng?.longitude.toString())
-                    viewModel.setCityMeta(cm)
+                    cm.favorite = true
+                    viewModel.saveCityMeta(cm)
+//                    val latlng = viewModel.observeLatLng().value
+//
+//                    val cm = viewModel.createCityMeta(viewModel.observeCity().value!!,
+//                        viewModel.observeState().value!!, viewModel.observeUnits().value!!,
+//                        false, latlng?.latitude.toString(), latlng?.longitude.toString())
                 }
                 else{
+                    Log.d("XXX", "home fragment clicked on city " + cm.state)
+                    Log.d("XXX", "not a favorite")
                     binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                    cm.favorite = false
                     viewModel.remove()
                 }
             }
