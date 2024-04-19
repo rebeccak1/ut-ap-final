@@ -48,8 +48,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(activityMainBinding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        setSupportActionBar(binding.
+//        toolbar)
         initMenu()
 //        setSupportActionBar(activityMainBinding.toolbar)
 
@@ -73,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set up our nav graph
         navController = findNavController(R.id.main_frame)
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
         // If we have a toolbar (not actionbar) we don't need to override
         // onSupportNavigateUp().
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -82,9 +84,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    override fun onSupportNavigateUp(): Boolean {
-//        // XXX Write me
-//        return navController.navigateUp(appBarConfiguration)
-//                || super.onSupportNavigateUp()
-//    }
+    override fun onSupportNavigateUp(): Boolean {
+        // XXX Write me
+        return navController.navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
+    }
 }

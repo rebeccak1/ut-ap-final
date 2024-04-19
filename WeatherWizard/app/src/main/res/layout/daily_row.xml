@@ -13,7 +13,7 @@
     <TextView
         android:id="@+id/rowDay"
         android:layout_weight="1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#000000"
         android:textSize="20sp"
@@ -27,7 +27,7 @@
         android:layout_weight="1"
         android:layout_gravity="center"
         android:textStyle="bold"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="#000000"
         android:textSize="20sp"
@@ -39,7 +39,7 @@
         android:layout_weight="1"
         android:layout_gravity="center"
 
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
 
         android:src="@drawable/clearsky"
@@ -49,7 +49,7 @@
         android:layout_weight="1"
         android:layout_gravity="center"
 
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/blue1"
         android:textSize="20sp"
@@ -65,7 +65,7 @@
         android:layout_weight="1"
         android:layout_gravity="center"
         android:textColor="@color/cherry"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:text="90"
