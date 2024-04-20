@@ -3,15 +3,13 @@ package edu.utap.weatherwizard.api
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class WeatherWeather(val data: List<WeatherWeatherData>)
-
 data class WeatherTemp(
     @SerializedName("day")
     val day: Double,
     @SerializedName("min")
-    val min: Double,
+    var min: Double,
     @SerializedName("max")
-    val max: Double,
+    var max: Double,
     @SerializedName("night")
     val night: Double,
     @SerializedName("eve")

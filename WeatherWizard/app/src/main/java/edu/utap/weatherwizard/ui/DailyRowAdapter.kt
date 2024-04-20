@@ -31,7 +31,6 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        //XXX Write me.
         val rowBinding = holder.dailyRowBinding
         val item = getItem(position)
         val date = java.util.Date(item.dt.toLong()*1000)

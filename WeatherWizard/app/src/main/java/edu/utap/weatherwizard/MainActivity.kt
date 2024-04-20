@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initMenu() {
         addMenuProvider(object : MenuProvider {
-            // XXX Write me, menu provider overrides
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_main, menu)
 
@@ -35,7 +34,6 @@ class MainActivity : AppCompatActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_settings -> {
-                        // XXX Write me
                         val navController = findNavController(R.id.main_frame)
                         navController.navigate(R.id.settingsFragment)
                         return true
@@ -65,6 +63,10 @@ class MainActivity : AppCompatActivity() {
             viewModel.setCurrentAuthUser(user)
             Log.d("XXX", username.toString() +" " + useremail.toString() +" " + uuid.toString())
 
+            viewModel.fetchUnitsMeta{
+                viewModel.setUnits()
+                Log.d("XXX","units meta posted value " + viewModel.observeCurrentUM().value?.units)
+            }
             viewModel.fetchCityMeta() {
                 viewModel.setHome()
 //                viewModel.repoFetch()
@@ -72,6 +74,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else{
+            viewModel.setUnits()
             viewModel.setHome()
         }
 
@@ -98,6 +101,6 @@ class MainActivity : AppCompatActivity() {
 //changing home
 
 //only set different on city search
-//hourly?
 //celsius
+//hourly?
 //swipe refresh

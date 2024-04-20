@@ -4,10 +4,13 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import edu.utap.weatherwizard.model.CityMeta
+import edu.utap.weatherwizard.model.UnitsMeta
 
 class ViewModelDBHelper {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val rootCollection = "allCityMeta"
+    private val unitsCollection = "allUnits"
+
 
     // If we want to listen for real time updates use this
     // .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -28,16 +31,42 @@ class ViewModelDBHelper {
                 resultListener(listOf())
             }
     }
+
+    private fun limitAndGetUnits(query: Query,
+                                 resultListener: (List<UnitsMeta>)->Unit) {
+        query
+            .limit(100)
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d("XXX", "allNotes fetch ${result!!.documents.size}")
+                // NB: This is done on a background thread
+                resultListener(result.documents.mapNotNull {
+                    it.toObject(UnitsMeta::class.java)
+                })
+            }
+            .addOnFailureListener {
+                Log.d("XXX", "allNotes fetch FAILED ", it)
+                resultListener(listOf())
+            }
+    }
     /////////////////////////////////////////////////////////////
     // Interact with Firestore db
     // https://firebase.google.com/docs/firestore/query-data/order-limit-data
     fun fetchCityMeta(user: String,
         resultListener: (List<CityMeta>) -> Unit
     ) {
-        // XXX Write me and use limitAndGet
         Log.d("XXX", "fetching in view model")
         val query = db.collection(rootCollection).orderBy("city", Query.Direction.ASCENDING).whereEqualTo("ownerUid", user)
         limitAndGet(query, resultListener)
+
+    }
+
+    fun fetchUnitsMeta(user: String,
+                      resultListener: (List<UnitsMeta>) -> Unit
+    ) {
+        Log.d("XXX", "fetching in view model")
+        val query = db.collection(unitsCollection).orderBy("units", Query.Direction.ASCENDING).whereEqualTo("ownerUid", user)
+        limitAndGetUnits(query, resultListener)
 
     }
 
@@ -46,7 +75,6 @@ class ViewModelDBHelper {
         cityMeta: CityMeta,
         resultListener: (List<CityMeta>)->Unit
     ) {
-        // XXX Write me: add photoMeta
         db.collection(rootCollection)
             .add(cityMeta)
             .addOnSuccessListener {
@@ -79,12 +107,32 @@ class ViewModelDBHelper {
             }
     }
 
+    fun updateUnitsMeta(user: String,
+                       unitsMeta: UnitsMeta, newUnits:String,
+                       resultListener: (List<UnitsMeta>)->Unit
+    ){
+        db.collection(unitsCollection)
+            .document(unitsMeta.firestoreID)
+            .update("units", newUnits)
+            .addOnSuccessListener {
+                Log.d(
+                    javaClass.simpleName,
+                    "Note update id: ${unitsMeta.firestoreID}"
+                )
+                fetchUnitsMeta(user, resultListener)
+            }
+            .addOnFailureListener { e->
+                Log.d(javaClass.simpleName, "Note updating FAILED ")
+                Log.w(javaClass.simpleName, "Error adding document", e)
+            }
+    }
+
+
     // https://firebase.google.com/docs/firestore/manage-data/delete-data#delete_documents
     fun removeCityMeta(user: String,
         cityMeta: CityMeta,
         resultListener: (List<CityMeta>)->Unit
     ) {
-        // XXX Write me.  Make sure you delete the correct entry.  What uniquely identifies a photoMeta?
         db.collection(rootCollection)
             .document(cityMeta.firestoreID)
             .delete()
@@ -98,6 +146,22 @@ class ViewModelDBHelper {
             .addOnFailureListener { e->
                 Log.d(javaClass.simpleName, "Note deleting FAILED ")
                 Log.w(javaClass.simpleName, "Error adding document", e)
+            }
+
+    }
+
+    fun createUnitsMeta(user: String,
+                       unitsMeta: UnitsMeta,
+                       resultListener: (List<UnitsMeta>)->Unit
+    ) {
+        db.collection(unitsCollection)
+            .add(unitsMeta)
+            .addOnSuccessListener {
+                fetchUnitsMeta(user, resultListener)
+            }
+            .addOnFailureListener { e->
+                Log.d(javaClass.simpleName, "Note create FAILED ")
+                Log.w(javaClass.simpleName, "Error", e)
             }
 
     }

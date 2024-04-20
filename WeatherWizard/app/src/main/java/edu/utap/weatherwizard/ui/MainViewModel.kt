@@ -17,11 +17,14 @@ import edu.utap.weatherwizard.api.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.google.android.gms.maps.model.LatLng
+import edu.utap.weatherwizard.model.UnitsMeta
 
 class MainViewModel : ViewModel() {
 
     // LiveData for entire note list, all images
     private var cityMetaList = MutableLiveData<List<CityMeta>>()
+    private var unitsMetaList = MutableLiveData<List<UnitsMeta>>()
+
 
     // Track current authenticated user
     private var currentAuthUser = invalidUser
@@ -30,32 +33,43 @@ class MainViewModel : ViewModel() {
     private val weatherApi = WeatherApi.create()
     private val repository = WeatherRepository(weatherApi)
 
-    private var unit = MutableLiveData<String>()
-    private var favorite = MutableLiveData<Boolean>()
-    private var home = MutableLiveData<Boolean>()
+//    private var favorite = MutableLiveData<Boolean>()
 
     private var currentCityMeta = MutableLiveData<CityMeta>()
+    private var currentUnitsMeta = MutableLiveData<UnitsMeta>()
 
 
     private var netWeatherDaily = MediatorLiveData<List<WeatherDaily>>().apply {
-
-//        addSource(unit) {unit: String ->
-//            viewModelScope.launch(
-//                context = viewModelScope.coroutineContext
-//                        + Dispatchers.Default
-//            ) {
-//                Log.d("XXX", "netweatherdaily fetch")
+        val currentNetWeatherDaily = this.value
+        addSource(currentUnitsMeta) {
+            viewModelScope.launch(
+                context = viewModelScope.coroutineContext
+                        + Dispatchers.Default
+            ) {
+                Log.d("XXX", "netweatherdaily fetch from current units")
 //                postValue(repository.getWeather(latlon.value?.latitude.toString(), latlon.value?.longitude.toString(), unit))
-//            }
-//        }
+                val newNetWeatherDaily = mutableListOf<WeatherDaily>()
+                if (currentNetWeatherDaily != null) {
+                    for(wd in currentNetWeatherDaily){
+                        val newwd = wd.copy()
+                        if(it.units == "Fahrenheit") {
+                            newwd.temp.max = (newwd.temp.max * 9.0/5.0) + 32
+                            newwd.temp.min = (newwd.temp.min - 32 ) * 5.0/9.0
+
+                        }
+                        newNetWeatherDaily.add(newwd)
+                    }
+                }
+                postValue(newNetWeatherDaily)
+            }
+        }
         addSource(currentCityMeta){
             viewModelScope.launch (
                 context = viewModelScope.coroutineContext
                         + Dispatchers.Default
             ) {
-               Log.d("XXX", "netweatherdaily fetch")
-               postValue(repository.getWeather(currentCityMeta.value?.latitude.toString(), currentCityMeta.value?.longitude.toString(), unit.value!!))
-
+               Log.d("XXX", "netweatherdaily fetch from current city " + currentUnitsMeta.value?.units + currentCityMeta.value?.latitude.toString())
+               postValue(repository.getWeather(currentCityMeta.value?.latitude.toString(), currentCityMeta.value?.longitude.toString(), currentUnitsMeta.value!!.units))
             }
         }
     }
@@ -94,6 +108,17 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun fetchUnitsMeta(resultListener:()->Unit) {
+        Log.d("XXX", "view model fetching units meta")
+        dbHelp.fetchUnitsMeta(currentAuthUser.uid) {
+
+            unitsMetaList.value = it
+            Log.d("XXX", "view model fetching city meta: posting")
+
+            resultListener.invoke()
+        }
+    }
+
     fun getHome(): CityMeta?{
         for(c in 0..<cityMetaList.value!!.size) {
             val record = cityMetaList.value!![c]
@@ -111,11 +136,38 @@ class MainViewModel : ViewModel() {
         return null
     }
 
+    fun getCityState(city: String, state:String): CityMeta?{
+        for(c in 0..<cityMetaList.value!!.size) {
+            val record = cityMetaList.value!![c]
+            if((record.city == city) && (record.state==state)){
+                return record
+            }
+        }
+        return null
+    }
+
+    fun setUnits(){
+        if(unitsMetaList.value.isNullOrEmpty()){
+            Log.d("XXX", "in set units, is empty")
+            var um = createUnitsMeta("Fahrenheit")
+            if(currentAuthUser != invalidUser) {
+                saveUnitsMeta(um)
+            }
+            setUnitsMeta(um)
+            return
+        }
+        else{
+            val record = unitsMetaList.value!![0]
+            setUnitsMeta(record)
+            return
+        }
+    }
+
     fun setHome(){
         if(cityMetaList.value.isNullOrEmpty()){
             Log.d("XXX", "in set home city meta empty")
             var cm = createCityMeta("Austin", "Texas", "Fahrenheit", false, true, "30.2672", "-97.7431")
-            setUnit("Fahrenheit")
+//            setUnit("Fahrenheit")
             if(currentAuthUser != invalidUser) {
                 saveCityMeta(cm)
             }
@@ -126,13 +178,13 @@ class MainViewModel : ViewModel() {
             Log.d("XXX", "in set home city meta NOT empty")
             val record = getHome()
             if(record != null) {
-                setUnit("Fahrenheit")
+//                setUnit("Fahrenheit")
                 setCityMeta(record)
                 return
             }
 
             var cm = createCityMeta("Austin", "Texas", "Fahrenheit", false,true, "30.2672", "-97.7431")
-            setUnit("Fahrenheit")
+//            setUnit("Fahrenheit")
             saveCityMeta(cm)
             setCityMeta(cm)
         }
@@ -146,9 +198,9 @@ class MainViewModel : ViewModel() {
         currentAuthUser = user
     }
 
-    fun setFavBool(newfav: Boolean){
-        favorite.value = newfav
-    }
+//    fun setFavBool(newfav: Boolean){
+//        favorite.value = newfav
+//    }
 
     fun observeCurrentCM(): LiveData<CityMeta>{
         return currentCityMeta
@@ -178,6 +230,12 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun updateUnitsMeta(um: UnitsMeta, newunits: String){
+        dbHelp.updateUnitsMeta(currentAuthUser.uid, um, newunits){
+            unitsMetaList.postValue(it)
+        }
+    }
+
     fun removeCityMeta(position: Int) {
         val cityMeta = getCityMeta(position)
         dbHelp.removeCityMeta(currentAuthUser.uid, cityMeta){
@@ -191,18 +249,25 @@ class MainViewModel : ViewModel() {
         return note!!
     }
 
-    fun observeUnits(): LiveData<String> {
-        return unit
+    fun observeCurrentUM(): LiveData<UnitsMeta>{
+        return currentUnitsMeta
     }
 
-    fun setUnit(newUnit: String){
-        unit.value = newUnit
+    fun setUnitsMeta(um: UnitsMeta){
+        currentUnitsMeta.value = um
     }
 
     fun saveCityMeta(cityMeta: CityMeta){
         val currentUser = currentAuthUser
         dbHelp.createCityMeta(currentUser.uid, cityMeta) {
             cityMetaList.postValue(it)
+        }
+    }
+
+    fun saveUnitsMeta(unitsMeta: UnitsMeta){
+        val currentUser = currentAuthUser
+        dbHelp.createUnitsMeta(currentUser.uid, unitsMeta) {
+            unitsMetaList.postValue(it)
         }
     }
 
@@ -213,7 +278,7 @@ class MainViewModel : ViewModel() {
             ownerUid = currentUser.uid,
             city = city,
             state = state,
-            units = units,
+//            units = units,
             favorite = favorite,
             home = home,
             latitude = latitude,
@@ -221,6 +286,17 @@ class MainViewModel : ViewModel() {
         )
 
         return cityMeta
+    }
+
+    fun createUnitsMeta(units: String): UnitsMeta {
+        val currentUser = currentAuthUser
+        val unitsMeta = UnitsMeta(
+            ownerName = currentUser.name,
+            ownerUid = currentUser.uid,
+            units = units
+        )
+
+        return unitsMeta
     }
 
 }

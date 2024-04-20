@@ -23,15 +23,9 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import com.google.android.gms.maps.model.LatLng
 
-
-// XXX Write most of this file
 class CityFragment: Fragment() {
-    // XXX initialize viewModel
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var geocoder: Geocoder
-    var latLng: LatLng? = null
-    var city: String? = null
-    var state: String? = null
 
     private var _binding: FragmentCityBinding? = null
 
@@ -40,22 +34,31 @@ class CityFragment: Fragment() {
 //    private val args: CityFragmentArgs by navArgs()
 
     private suspend fun processAddresses(addresses: List<Address>){
-        // XXX Write me.  Note: suspend fun, so withContext is wise.  move the camera
         withContext(Dispatchers.Main) {
             Log.d("XXX", addresses.toString()+" process address")
             if(addresses.isNotEmpty()) {
                 val address = addresses[0]
                 if(address.hasLatitude() && address.hasLongitude()) {
-                    var cm = viewModel.createCityMeta(address.locality, address.adminArea, "Fahrenheit", false,false, address.latitude.toString(), address.longitude.toString())
-                    viewModel.setFavBool(false)
-                    viewModel.setCityMeta(cm)
-//                    latLng = LatLng(address.latitude, address.longitude)
-//                    viewModel.setCity(address.locality)
-//                    viewModel.setState(address.adminArea)
-//                    viewModel.setLatLon(latLng!!)
-//                    viewModel.setHomeBool(false)
-//                    viewModel.setFavBool(false)
-//                    viewModel.setPos(-1)
+                    //check if already exists
+                    var existsCM = viewModel.getCityState(address.locality, address.adminArea)
+                    if(existsCM != null){
+                        viewModel.setCityMeta(existsCM)
+//                        viewModel.setFavBool(existsCM.favorite)
+                    }
+                    else {
+                        var cm = viewModel.createCityMeta(
+                            address.locality,
+                            address.adminArea,
+                            "Fahrenheit",
+                            false,
+                            false,
+                            address.latitude.toString(),
+                            address.longitude.toString()
+                        )
+//                        viewModel.setFavBool(false)
+                        viewModel.setCityMeta(cm)
+                    }
+
 
                 }
             }
@@ -65,7 +68,6 @@ class CityFragment: Fragment() {
 
     private fun initAdapter(binding: FragmentCityBinding) {
         val postRowAdapter = CityRowAdapter(viewModel, findNavController())
-        // XXX Write me, observe posts
         val rv = binding.cityRV
         rv.adapter = postRowAdapter
         rv.layoutManager = LinearLayoutManager(requireContext())

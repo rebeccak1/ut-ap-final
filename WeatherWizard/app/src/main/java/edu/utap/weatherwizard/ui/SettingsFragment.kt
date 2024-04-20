@@ -65,7 +65,7 @@ class SettingsFragment : Fragment() {
         initMenu()
 
         binding.unitsSpinner.adapter = createAdapterFromResource(R.array.units_array)
-        val currentUnit = viewModel.observeUnits().value
+        val currentUnit = viewModel.observeCurrentUM().value?.units
         val spinnerPosition = units.indexOf(currentUnit)
         var unit = currentUnit
         binding.unitsSpinner.setSelection(spinnerPosition);
@@ -77,7 +77,7 @@ class SettingsFragment : Fragment() {
         binding.okBut.setOnClickListener {
             if(unit != currentUnit) {
                 Log.d("XXX", "setting units to $unit")
-                viewModel.setUnit(unit!!)
+                viewModel.updateUnitsMeta(viewModel.observeCurrentUM().value!!, unit!!)
             }
 
             findNavController().popBackStack()

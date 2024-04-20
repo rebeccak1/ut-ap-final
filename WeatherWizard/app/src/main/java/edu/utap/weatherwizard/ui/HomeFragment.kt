@@ -19,9 +19,7 @@ import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.databinding.FragmentHomeBinding
 import edu.utap.weatherwizard.invalidUser
 
-// XXX Write most of this file
 class HomeFragment: Fragment() {
-    // XXX initialize viewModel
     private val viewModel: MainViewModel by activityViewModels()
 
     private var _binding: FragmentHomeBinding? = null
@@ -32,21 +30,13 @@ class HomeFragment: Fragment() {
     // Set up the adapter and recycler view
     private fun initAdapter(binding: FragmentHomeBinding) {
         val postRowAdapter = DailyRowAdapter(viewModel) {
-//            Log.d("OnePost",
-//                String.format("OnePost title %s",
-//                    if (it.title.length > 32)
-//                        it.title.substring(0, 31) + "..."
-//                    else it.title))
-//            Log.d("doOnePost", "image ${it.imageURL}")
-            // XXX Write me
             val action = HomeFragmentDirections.actionHomeFragmentToOneDayFragment(it)
             findNavController().navigate(action)
 
         }
-        // XXX Write me, observe posts
         val rv = binding.dailyRV
         rv.adapter = postRowAdapter
-        rv.layoutManager = LinearLayoutManager(requireContext())
+        rv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         viewModel.observeNetWeatherDaily().observe(viewLifecycleOwner) { postList ->
             postRowAdapter.submitList(postList)
             Log.d("XXX", "OBSERVING net weather")

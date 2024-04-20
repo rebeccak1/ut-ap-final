@@ -66,12 +66,13 @@ class OneDayFragment: Fragment() {
         val month = SimpleDateFormat("MMMM").format(date)
 
         binding.dailyDay.text = dow +", " + month + " " + dom
-        binding.cloudsEdit.text = args.daily.clouds.toString()
-        binding.humidityEdit.text = args.daily.humidity.toString()
-        binding.precippct.text = args.daily.pop.toString()
+        binding.cloudsEdit.text = args.daily.clouds.toString() + "%"
+        binding.humidityEdit.text = args.daily.humidity.toString() + "%"
+        binding.precippct.text = (args.daily.pop*100).toString()
         binding.high.text = String.format("%2.0f",args.daily.temp.max)
         binding.summary.text = args.daily.summary
         binding.uvEdit.text = String.format("%2.0f",args.daily.uvi)
+        binding.feelsLikeHighEdit.text = args.daily.feels_like.day.toString()
 
         when(args.daily.weather[0].icon){
             "01d" -> binding.icon.setImageResource(R.drawable.clearsky)

@@ -23,9 +23,7 @@ class CityRowAdapter(private val viewModel: MainViewModel,
                 val cityMeta = getItem(bindingAdapterPosition)
                 Log.d("XXX", "clicked on city meta with city " + cityMeta.city)
                 viewModel.setCityMeta(cityMeta)
-//                viewModel.setCity(cityMeta.city)
-//                viewModel.setState(cityMeta.state)
-//                viewModel.setLatLon(LatLng(cityMeta.latitude.toDouble(), cityMeta.longitude.toDouble()))
+
                 navController.popBackStack()
             }
             cityRowBinding.rowComma.setOnClickListener {
@@ -61,7 +59,6 @@ class CityRowAdapter(private val viewModel: MainViewModel,
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        //XXX Write me.
         val rowBinding = holder.cityRowBinding
         val item = getItem(position)
 
