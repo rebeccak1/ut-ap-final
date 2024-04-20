@@ -11,6 +11,7 @@
         android:inputType="textPostalAddress"
         android:id="@+id/mapET"
         android:maxLines="1"
+        android:hint="Address or City, State"
         android:imeOptions="actionDone"
         android:autofillHints=""
         app:layout_constraintStart_toStartOf="parent"

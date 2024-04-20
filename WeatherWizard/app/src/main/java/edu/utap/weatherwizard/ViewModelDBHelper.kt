@@ -60,12 +60,12 @@ class ViewModelDBHelper {
     }
 
     fun updateCityMeta(user: String,
-                       cityMeta: CityMeta, newHome: Boolean,
+                       cityMeta: CityMeta, newHome: Boolean, newFavorite: Boolean,
                        resultListener: (List<CityMeta>)->Unit
     ){
         db.collection(rootCollection)
             .document(cityMeta.firestoreID)
-            .update("home", newHome)
+            .update("home", newHome, "favorite", newFavorite)
             .addOnSuccessListener {
                 Log.d(
                     javaClass.simpleName,

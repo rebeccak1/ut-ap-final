@@ -18,7 +18,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.google.android.gms.maps.model.LatLng
 
-
 class MainViewModel : ViewModel() {
 
     // LiveData for entire note list, all images
@@ -31,27 +30,15 @@ class MainViewModel : ViewModel() {
     private val weatherApi = WeatherApi.create()
     private val repository = WeatherRepository(weatherApi)
 
-    private var latlon = MutableLiveData<LatLng>()
-    private var city = MutableLiveData<String>()
-    private var state = MutableLiveData<String>()
     private var unit = MutableLiveData<String>()
     private var favorite = MutableLiveData<Boolean>()
     private var home = MutableLiveData<Boolean>()
-    private var pos = MutableLiveData<Int>()
 
     private var currentCityMeta = MutableLiveData<CityMeta>()
 
 
     private var netWeatherDaily = MediatorLiveData<List<WeatherDaily>>().apply {
-//        addSource(latlon) {latlon: LatLng ->
-//            viewModelScope.launch(
-//                context = viewModelScope.coroutineContext
-//                        + Dispatchers.Default
-//            ) {
-//                Log.d("XXX", "netweatherdaily fetch")
-//                postValue(repository.getWeather(latlon.latitude.toString(), latlon.longitude.toString(), unit.value!!))
-//            }
-//        }
+
 //        addSource(unit) {unit: String ->
 //            viewModelScope.launch(
 //                context = viewModelScope.coroutineContext
@@ -80,16 +67,19 @@ class MainViewModel : ViewModel() {
 //        }
     }
 
-    fun repoFetch() {
-        Log.d("XXX", "in repo fetch")
-        val fetch = latlon.value!!
-        latlon.value = fetch
-    }
+//    fun repoFetch() {
+//        Log.d("XXX", "in repo fetch")
+//        val fetch = latlon.value!!
+//        latlon.value = fetch
+//    }
 
     fun observeNetWeatherDaily(): LiveData<List<WeatherDaily>> {
         return netWeatherDaily
     }
 
+    fun getCurrentUser(): User{
+        return currentAuthUser
+    }
 
     /////////////////////////////////////////////////////////////
     // Notes, memory cache and database interaction
@@ -104,31 +94,43 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun getHome(): CityMeta?{
+        for(c in 0..<cityMetaList.value!!.size) {
+            val record = cityMetaList.value!![c]
+            if(record.home){
+
+//                    setCity(record.city)
+//                    setState(record.state)
+//                    setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
+//                    setPos(c)
+                Log.d("XXX", "in set home, home record found")
+
+                return record
+            }
+        }
+        return null
+    }
+
     fun setHome(){
         if(cityMetaList.value.isNullOrEmpty()){
             Log.d("XXX", "in set home city meta empty")
             var cm = createCityMeta("Austin", "Texas", "Fahrenheit", false, true, "30.2672", "-97.7431")
             setUnit("Fahrenheit")
-            saveCityMeta(cm)
+            if(currentAuthUser != invalidUser) {
+                saveCityMeta(cm)
+            }
             setCityMeta(cm)
             return
         }
         else{
             Log.d("XXX", "in set home city meta NOT empty")
-            for(c in 0..<cityMetaList.value!!.size) {
-                val record = cityMetaList.value!![c]
-                if(record.home){
-                    setUnit("Fahrenheit")
-                    setCityMeta(record)
-//                    setCity(record.city)
-//                    setState(record.state)
-//                    setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
-//                    setPos(c)
-                    Log.d("XXX", "in set home, home record found")
-
-                    return
-                }
+            val record = getHome()
+            if(record != null) {
+                setUnit("Fahrenheit")
+                setCityMeta(record)
+                return
             }
+
             var cm = createCityMeta("Austin", "Texas", "Fahrenheit", false,true, "30.2672", "-97.7431")
             setUnit("Fahrenheit")
             saveCityMeta(cm)
@@ -139,66 +141,24 @@ class MainViewModel : ViewModel() {
         return cityMetaList
     }
 
-    fun observeLatLng(): LiveData<LatLng> {
-        return latlon
-    }
-
-
     // MainActivity gets updates on this via live data and informs view model
     fun setCurrentAuthUser(user: User) {
         currentAuthUser = user
-    }
-
-    fun setLatLon(latLon: LatLng){
-        latlon.value = latLon
-    }
-
-    fun setCity(newcity: String){
-        city.value = newcity
-    }
-
-    fun setPos(newPos: Int){
-        pos.value = newPos
-    }
-
-    fun setState(newstate: String){
-        state.value = newstate
-    }
-
-    fun setHomeBool(newhome: Boolean){
-        home.value = newhome
     }
 
     fun setFavBool(newfav: Boolean){
         favorite.value = newfav
     }
 
-
-    fun observeState(): LiveData<String> {
-        return state
-    }
-
-    fun observeFavorite(): LiveData<Boolean> {
-        return favorite
-    }
-
     fun observeCurrentCM(): LiveData<CityMeta>{
         return currentCityMeta
     }
 
-    fun observeHome(): LiveData<Boolean> {
-        return home
-    }
-
-    fun observeCity(): LiveData<String> {
-        return city
-    }
-
-    fun remove(){
+    fun remove(removeCM: CityMeta){
         var position = 0
         for(i in 0..< cityMetaList.value!!.size){
             val cm = cityMetaList.value!![i]
-            if(cm.equals(currentCityMeta.value)){
+            if(cm == removeCM){
                 Log.d("XXX", "removing position found")
                 position = i
                 break
@@ -210,6 +170,12 @@ class MainViewModel : ViewModel() {
 
     fun setCityMeta(cm: CityMeta){
         currentCityMeta.value = cm
+    }
+
+    fun updateCityMeta(cm:CityMeta, newhome: Boolean, newfav: Boolean){
+        dbHelp.updateCityMeta(currentAuthUser.uid, cm, newhome, newfav){
+            cityMetaList.postValue(it)
+        }
     }
 
     fun removeCityMeta(position: Int) {

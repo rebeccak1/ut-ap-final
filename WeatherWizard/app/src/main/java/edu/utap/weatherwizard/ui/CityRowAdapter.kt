@@ -19,7 +19,6 @@ class CityRowAdapter(private val viewModel: MainViewModel,
     inner class VH(val cityRowBinding: CityRowBinding)
         : RecyclerView.ViewHolder(cityRowBinding.root) {
         init {
-            //fix these to navigate 8 day
             cityRowBinding.rowCity.setOnClickListener {
                 val cityMeta = getItem(bindingAdapterPosition)
                 Log.d("XXX", "clicked on city meta with city " + cityMeta.city)
@@ -45,11 +44,12 @@ class CityRowAdapter(private val viewModel: MainViewModel,
                 if(cityMeta.favorite){
                     cityMeta.favorite = false
                     cityRowBinding.rowIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                    viewModel.remove(cityMeta)
                 }
-                else{
-                    cityMeta.favorite = true
-                    cityRowBinding.rowIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
-                }
+//                else{
+//                    cityMeta.favorite = true
+//                    cityRowBinding.rowIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
+//                }
             }
         }
     }

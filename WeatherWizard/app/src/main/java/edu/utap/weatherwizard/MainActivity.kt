@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity() {
                 Log.d("XXX","city meta posted size " + viewModel.observeCityMeta().value?.size.toString())
             }
         }
+        else{
+            viewModel.setHome()
+        }
 
 
         // Set up our nav graph
@@ -90,3 +93,11 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 }
+//guest login
+//deleting favorites from list
+//changing home
+
+//only set different on city search
+//hourly?
+//celsius
+//swipe refresh

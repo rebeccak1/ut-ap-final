@@ -38,7 +38,7 @@
         android:id="@+id/cityFragment"
         tools:layout="@layout/fragment_city"
         android:name="edu.utap.weatherwizard.ui.CityFragment"
-        android:label="City" >
+        android:label="Cities" >
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

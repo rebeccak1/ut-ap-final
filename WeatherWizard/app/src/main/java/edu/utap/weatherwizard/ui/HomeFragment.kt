@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.databinding.FragmentHomeBinding
+import edu.utap.weatherwizard.invalidUser
 
 // XXX Write most of this file
 class HomeFragment: Fragment() {
@@ -54,43 +55,22 @@ class HomeFragment: Fragment() {
         viewModel.observeCurrentCM().observe(viewLifecycleOwner){
             binding.city.text = it.city
             binding.state.text = it.state
-            if(it.favorite){
-                binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
+            if(viewModel.getCurrentUser() != invalidUser) {
+                if (it.favorite) {
+                    binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
+                } else {
+                    binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                }
+                if (it.home) {
+                    binding.homeIcon.setImageResource(R.drawable.baseline_home_24)
+                } else {
+                    binding.homeIcon.setImageResource(R.drawable.outline_home_24)
+                }
             }
             else{
-                binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-            }
-            if(it.home){
-                binding.homeIcon.setImageResource(R.drawable.baseline_home_24)
-            }
-            else{
-                binding.homeIcon.setImageResource(R.drawable.outline_home_24)
+                binding.homeIcon.visibility=View.GONE
             }
         }
-
-//        viewModel.observeCity().observe(viewLifecycleOwner){
-//            binding.city.text = it
-//        }
-//
-//        viewModel.observeState().observe(viewLifecycleOwner){
-//            binding.state.text = it
-//        }
-//        viewModel.observeFavorite().observe(viewLifecycleOwner){
-//            if(it){
-//                binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
-//            }
-//            else{
-//                binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-//            }
-//        }
-//        viewModel.observeHome().observe(viewLifecycleOwner){
-//            if(it){
-//                binding.homeIcon.setImageResource(R.drawable.baseline_home_24)
-//            }
-//            else{
-//                binding.homeIcon.setImageResource(R.drawable.outline_home_24)
-//            }
-//        }
 
     }
 
@@ -123,30 +103,63 @@ class HomeFragment: Fragment() {
         }
 
         binding.favIcon.setOnClickListener {
-//            val home = viewModel.observeHome().value
-//            val fav = viewModel.observeCurrentCM().value?.favorite
-            val cm = viewModel.observeCurrentCM().value
-            val home = cm?.home
-            val fav = cm?.favorite
-            if(!home!!){
-                if(!fav!!){
-                    Log.d("XXX", "home fragment clicked on city " + cm.state)
-                    Log.d("XXX", "not a favorite")
-                    binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
-                    cm.favorite = true
-                    viewModel.saveCityMeta(cm)
-//                    val latlng = viewModel.observeLatLng().value
+            if(viewModel.getCurrentUser() != invalidUser) {
+
+                val cm = viewModel.observeCurrentCM().value
+                val home = cm?.home
+                val fav = cm?.favorite
+                if (!home!!) {
+                    if (!fav!!) {
+                        Log.d("XXX", "home fragment clicked on city " + cm.city)
+                        Log.d("XXX", "not a favorite")
+
+                        //need this?
+                        binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
+                        cm.favorite = true
+                        viewModel.saveCityMeta(cm)
 //
 //                    val cm = viewModel.createCityMeta(viewModel.observeCity().value!!,
 //                        viewModel.observeState().value!!, viewModel.observeUnits().value!!,
 //                        false, latlng?.latitude.toString(), latlng?.longitude.toString())
+                    } else {
+                        Log.d("XXX", "home fragment clicked on city " + cm.city)
+                        Log.d("XXX", "not a favorite")
+                        binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                        cm.favorite = false
+                        viewModel.remove(cm)
+                    }
+                }
+            }
+        }
+        binding.homeIcon.setOnClickListener {
+            if(viewModel.getCurrentUser() != invalidUser) {
+                val cm = viewModel.observeCurrentCM().value
+                val home = cm?.home
+                val fav = cm?.favorite
+                if(home!!){
+                    cm.home = false
+                    cm.favorite = true
+                    viewModel.updateCityMeta(cm, false, true)
+                    binding.homeIcon.setImageResource(R.drawable.outline_home_24)
+                    binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
+
                 }
                 else{
-                    Log.d("XXX", "home fragment clicked on city " + cm.state)
-                    Log.d("XXX", "not a favorite")
-                    binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-                    cm.favorite = false
-                    viewModel.remove()
+                    val prevHome = viewModel.getHome()
+                    cm.home = true
+                    if(prevHome != null){
+                        viewModel.updateCityMeta(prevHome, false, true)
+                    }
+                    if(cm.favorite) {
+                        viewModel.updateCityMeta(cm, true, false)
+                        cm.favorite = false
+                        binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                    }
+                    else{
+                        viewModel.saveCityMeta(cm)
+                    }
+                    binding.homeIcon.setImageResource(R.drawable.baseline_home_24)
+
                 }
             }
         }
