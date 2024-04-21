@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="radarmaps_array">
+        <item>Precipitation</item>
+        <item>Temperature</item>
+    </string-array>
+</resources>

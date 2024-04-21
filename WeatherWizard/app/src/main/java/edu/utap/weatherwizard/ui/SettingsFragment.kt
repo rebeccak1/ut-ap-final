@@ -68,7 +68,7 @@ class SettingsFragment : Fragment() {
         val currentUnit = viewModel.observeCurrentUM().value?.units
         val spinnerPosition = units.indexOf(currentUnit)
         var unit = currentUnit
-        binding.unitsSpinner.setSelection(spinnerPosition);
+        binding.unitsSpinner.setSelection(spinnerPosition)
 
         binding.cancelBut.setOnClickListener {
             findNavController().popBackStack()

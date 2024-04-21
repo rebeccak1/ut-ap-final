@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
 import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.databinding.FragmentHomeBinding
@@ -26,7 +28,12 @@ class HomeFragment: Fragment() {
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
-
+    private fun initRecyclerViewDividers(rv: RecyclerView) {
+        val dividerItemDecoration = DividerItemDecoration(
+            rv.context, LinearLayoutManager.HORIZONTAL
+        )
+        rv.addItemDecoration(dividerItemDecoration)
+    }
     // Set up the adapter and recycler view
     private fun initAdapter(binding: FragmentHomeBinding) {
         val postRowAdapter = DailyRowAdapter(viewModel) {
@@ -37,6 +44,7 @@ class HomeFragment: Fragment() {
         val rv = binding.dailyRV
         rv.adapter = postRowAdapter
         rv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        initRecyclerViewDividers(rv)
         viewModel.observeNetWeatherDaily().observe(viewLifecycleOwner) { postList ->
             postRowAdapter.submitList(postList)
             Log.d("XXX", "OBSERVING net weather")

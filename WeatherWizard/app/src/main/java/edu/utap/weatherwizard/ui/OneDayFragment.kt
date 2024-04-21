@@ -73,6 +73,11 @@ class OneDayFragment: Fragment() {
         binding.summary.text = args.daily.summary
         binding.uvEdit.text = String.format("%2.0f",args.daily.uvi)
         binding.feelsLikeHighEdit.text = args.daily.feels_like.day.toString()
+        binding.units.text = when(viewModel.observeCurrentUM().value?.units){
+            "Fahrenheit" -> "F"
+            "Celsius" -> "C"
+            else -> ""
+        }
 
         when(args.daily.weather[0].icon){
             "01d" -> binding.icon.setImageResource(R.drawable.clearsky)

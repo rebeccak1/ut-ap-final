@@ -1,7 +1,9 @@
 package edu.utap.weatherwizard.ui
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -57,17 +59,25 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
         rowBinding.rowDate.text = calendar.get(java.util.Calendar.DAY_OF_MONTH).toString()
         rowBinding.rowHigh.text = String.format("%2.0f",item.temp.max)
         rowBinding.rowLow.text = String.format("%2.0f",item.temp.min)
-        val weight = (1-(.2*(1-item.temp.max/90)))/2
-        rowBinding.rowHigh.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-            (.2*(1-item.temp.max/90)).toFloat()
-        )
+//        val weight = (1-(.2*(1-item.temp.min/60)))/2
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            weight =   (.2*(1-item.temp.max/100)).toFloat()
+        }
+        params.gravity = Gravity.CENTER;
+
+        rowBinding.rowHigh.setLayoutParams(params)
+//        rowBinding.rowHigh.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+//            (.2*(1-item.temp.max/100)).toFloat()
 //        rowBinding.colorbar.layoutParams = LayoutParams(rowBinding.colorbar.width, LayoutParams.WRAP_CONTENT,
 //            (weight).toFloat())
-
-        rowBinding.rowLow.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-            (weight).toFloat())
-
-        rowBinding.rowIcon.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0F)
+//
+//        rowBinding.rowLow.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+//            (weight).toFloat())
+//
+//        rowBinding.rowIcon.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0F)
 
         when(item.weather[0].icon){
             "01d" -> rowBinding.rowIcon.setImageResource(R.drawable.clearsky)

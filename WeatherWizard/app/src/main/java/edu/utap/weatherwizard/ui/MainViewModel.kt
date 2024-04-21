@@ -25,15 +25,12 @@ class MainViewModel : ViewModel() {
     private var cityMetaList = MutableLiveData<List<CityMeta>>()
     private var unitsMetaList = MutableLiveData<List<UnitsMeta>>()
 
-
     // Track current authenticated user
     private var currentAuthUser = invalidUser
     // Database access
     private val dbHelp = ViewModelDBHelper()
     private val weatherApi = WeatherApi.create()
     private val repository = WeatherRepository(weatherApi)
-
-//    private var favorite = MutableLiveData<Boolean>()
 
     private var currentCityMeta = MutableLiveData<CityMeta>()
     private var currentUnitsMeta = MutableLiveData<UnitsMeta>()
@@ -146,10 +143,6 @@ class MainViewModel : ViewModel() {
             val record = cityMetaList.value!![c]
             if(record.home){
 
-//                    setCity(record.city)
-//                    setState(record.state)
-//                    setLatLon(LatLng(record.latitude.toDouble(), record.longitude.toDouble()))
-//                    setPos(c)
                 Log.d("XXX", "in set home, home record found")
 
                 return record
@@ -190,7 +183,6 @@ class MainViewModel : ViewModel() {
         if(cityMetaList.value.isNullOrEmpty()){
             Log.d("XXX", "in set home city meta empty")
             var cm = createCityMeta("Austin", "Texas", "Fahrenheit", false, true, "30.2672", "-97.7431")
-//            setUnit("Fahrenheit")
             if(currentAuthUser != invalidUser) {
                 saveCityMeta(cm)
             }
@@ -201,13 +193,11 @@ class MainViewModel : ViewModel() {
             Log.d("XXX", "in set home city meta NOT empty")
             val record = getHome()
             if(record != null) {
-//                setUnit("Fahrenheit")
                 setCityMeta(record)
                 return
             }
 
             var cm = createCityMeta("Austin", "Texas", "Fahrenheit", false,true, "30.2672", "-97.7431")
-//            setUnit("Fahrenheit")
             saveCityMeta(cm)
             setCityMeta(cm)
         }
@@ -216,14 +206,9 @@ class MainViewModel : ViewModel() {
         return cityMetaList
     }
 
-    // MainActivity gets updates on this via live data and informs view model
     fun setCurrentAuthUser(user: User) {
         currentAuthUser = user
     }
-
-//    fun setFavBool(newfav: Boolean){
-//        favorite.value = newfav
-//    }
 
     fun observeCurrentCM(): LiveData<CityMeta>{
         return currentCityMeta
