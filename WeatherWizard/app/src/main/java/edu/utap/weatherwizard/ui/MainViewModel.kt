@@ -66,7 +66,7 @@ class MainViewModel : ViewModel() {
 //                    }
 //                }
 //                Log.d("XXX", "new net weatherdaily size " + newNetWeatherDaily.size)
-                if(it != null){
+                if(it != null && currentCityMeta.value!=null){
                     postValue(
                         repository.getWeather(
                             currentCityMeta.value?.latitude.toString(),
@@ -83,7 +83,7 @@ class MainViewModel : ViewModel() {
                         + Dispatchers.Default
             ) {
                Log.d("XXX", "netweatherdaily fetch from current city " + currentUnitsMeta.value?.units + currentCityMeta.value?.latitude.toString())
-                if(it != null) {
+                if(it != null && currentUnitsMeta.value !=null) {
                     postValue(
                         repository.getWeather(
                             currentCityMeta.value?.latitude.toString(),

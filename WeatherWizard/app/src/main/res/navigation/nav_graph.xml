@@ -22,6 +22,10 @@
             android:id="@+id/action_homeFragment_to_cityFragment"
             app:destination="@id/cityFragment">
         </action>
+        <action
+            android:id="@+id/action_homeFragment_to_radarFragment"
+            app:destination="@id/radarFragment">
+        </action>
         </fragment>
 
     <fragment
@@ -45,5 +49,10 @@
         android:name="edu.utap.weatherwizard.ui.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
-
+    <fragment
+        android:id="@+id/radarFragment"
+        android:name="edu.utap.weatherwizard.ui.RadarFragment"
+        tools:layout="@layout/fragment_radar"
+        android:label="Current Radar" >
+    </fragment>
 </navigation>

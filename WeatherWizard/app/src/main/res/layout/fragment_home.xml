@@ -23,6 +23,12 @@
             android:gravity="center"
             android:id="@+id/dropdownCity"
             >
+            <ImageView
+                android:id="@+id/radar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_map_24"
+                />
         <ImageView
             android:id="@+id/arrowdown"
             android:layout_width="wrap_content"

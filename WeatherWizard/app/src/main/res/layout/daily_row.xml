@@ -7,12 +7,13 @@
     android:orientation="vertical"
     android:id="@+id/rowview"
     >
-    <!-- Background attribute gives the whole layout the satisfying ripple
-    effect on selection -->
-
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
     <TextView
         android:id="@+id/rowDay"
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000000"
@@ -44,11 +45,37 @@
 
         android:src="@drawable/clearsky"
         />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/rowHigh"
+        android:layout_weight=".2"
+        android:layout_gravity="center"
+        android:gravity="bottom"
+        android:textColor="@color/cherry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="90"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/colorbar"
+        android:layout_weight=".4"
+        android:background = "@drawable/gradient_drawable"
+        android:layout_margin = "16dp"
+        android:layout_width = "20dp"
+        android:layout_gravity="center"
+        android:layout_height = "wrap_content"/>
+
     <TextView
         android:id="@+id/rowLow"
-        android:layout_weight="1"
         android:layout_gravity="center"
-
+        android:gravity="top"
+        android:layout_weight=".4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/blue1"
@@ -60,18 +87,5 @@
         />
 
 
-    <TextView
-        android:id="@+id/rowHigh"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:textColor="@color/cherry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="90"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
 
 </LinearLayout>

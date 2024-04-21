@@ -92,6 +92,11 @@ class HomeFragment: Fragment() {
             findNavController().navigate(action)
         }
 
+        binding.radar.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToRadarFragment()
+            findNavController().navigate(action)
+        }
+
         binding.favIcon.setOnClickListener {
             if(viewModel.getCurrentUser() != invalidUser) {
 
