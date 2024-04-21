@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.setUnits()
                 Log.d("XXX","units meta posted value " + viewModel.observeCurrentUM().value?.units)
             }
-            viewModel.fetchCityMeta() {
+            viewModel.fetchCityMeta{
                 viewModel.setHome()
 //                viewModel.repoFetch()
                 Log.d("XXX","city meta posted size " + viewModel.observeCityMeta().value?.size.toString())
@@ -96,11 +96,13 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 }
-//guest login
 //deleting favorites from list
 //changing home
-
 //only set different on city search
+
 //celsius
+//guest login
+
+//one day fragment click listeners and units
 //hourly?
 //swipe refresh

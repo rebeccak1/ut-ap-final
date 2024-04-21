@@ -77,7 +77,10 @@ class SettingsFragment : Fragment() {
         binding.okBut.setOnClickListener {
             if(unit != currentUnit) {
                 Log.d("XXX", "setting units to $unit")
-                viewModel.updateUnitsMeta(viewModel.observeCurrentUM().value!!, unit!!)
+                val um = viewModel.observeCurrentUM().value!!
+                um.units = unit!!
+                viewModel.setUnitsMeta(um)
+                viewModel.updateUnitsMeta(um, unit!!)
             }
 
             findNavController().popBackStack()

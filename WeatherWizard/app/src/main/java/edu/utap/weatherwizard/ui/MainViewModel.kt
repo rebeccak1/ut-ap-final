@@ -40,7 +40,7 @@ class MainViewModel : ViewModel() {
 
 
     private var netWeatherDaily = MediatorLiveData<List<WeatherDaily>>().apply {
-        val currentNetWeatherDaily = this.value
+
         addSource(currentUnitsMeta) {
             viewModelScope.launch(
                 context = viewModelScope.coroutineContext
@@ -48,19 +48,33 @@ class MainViewModel : ViewModel() {
             ) {
                 Log.d("XXX", "netweatherdaily fetch from current units")
 //                postValue(repository.getWeather(latlon.value?.latitude.toString(), latlon.value?.longitude.toString(), unit))
-                val newNetWeatherDaily = mutableListOf<WeatherDaily>()
-                if (currentNetWeatherDaily != null) {
-                    for(wd in currentNetWeatherDaily){
-                        val newwd = wd.copy()
-                        if(it.units == "Fahrenheit") {
-                            newwd.temp.max = (newwd.temp.max * 9.0/5.0) + 32
-                            newwd.temp.min = (newwd.temp.min - 32 ) * 5.0/9.0
-
-                        }
-                        newNetWeatherDaily.add(newwd)
-                    }
+//                val newNetWeatherDaily = mutableListOf<WeatherDaily>()
+//                if (currentNetWeatherDaily != null) {
+//                    Log.d("XXX", "current net weather daily is not null")
+//                    for(wd in currentNetWeatherDaily){
+//                        Log.d("XXX", "looping in change units")
+//                        val newwd = wd.copy()
+//                        if(it.units == "Fahrenheit") {
+//                            newwd.temp.max = (newwd.temp.max * 9.0/5.0) + 32
+//                            newwd.temp.min = (newwd.temp.min * 9.0/5.0) + 32
+//                        }
+//                        else{
+//                            newwd.temp.max = (newwd.temp.max - 32 ) * 5.0/9.0
+//                            newwd.temp.min = (newwd.temp.min - 32 ) * 5.0/9.0
+//                        }
+//                        newNetWeatherDaily.add(newwd)
+//                    }
+//                }
+//                Log.d("XXX", "new net weatherdaily size " + newNetWeatherDaily.size)
+                if(it != null){
+                    postValue(
+                        repository.getWeather(
+                            currentCityMeta.value?.latitude.toString(),
+                            currentCityMeta.value?.longitude.toString(),
+                            currentUnitsMeta.value!!.units
+                        )
+                    )
                 }
-                postValue(newNetWeatherDaily)
             }
         }
         addSource(currentCityMeta){
@@ -69,7 +83,15 @@ class MainViewModel : ViewModel() {
                         + Dispatchers.Default
             ) {
                Log.d("XXX", "netweatherdaily fetch from current city " + currentUnitsMeta.value?.units + currentCityMeta.value?.latitude.toString())
-               postValue(repository.getWeather(currentCityMeta.value?.latitude.toString(), currentCityMeta.value?.longitude.toString(), currentUnitsMeta.value!!.units))
+                if(it != null) {
+                    postValue(
+                        repository.getWeather(
+                            currentCityMeta.value?.latitude.toString(),
+                            currentCityMeta.value?.longitude.toString(),
+                            currentUnitsMeta.value!!.units
+                        )
+                    )
+                }
             }
         }
     }
@@ -157,6 +179,7 @@ class MainViewModel : ViewModel() {
             return
         }
         else{
+            Log.d("XXX", "in set units not empty")
             val record = unitsMetaList.value!![0]
             setUnitsMeta(record)
             return
