@@ -6,12 +6,15 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import edu.utap.weatherwizard.R
@@ -20,8 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import com.google.android.gms.maps.model.LatLng
 import edu.utap.weatherwizard.invalidUser
 
 class CityFragment: Fragment() {
@@ -32,7 +33,6 @@ class CityFragment: Fragment() {
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
-//    private val args: CityFragmentArgs by navArgs()
 
     private suspend fun processAddresses(addresses: List<Address>){
         withContext(Dispatchers.Main) {
@@ -98,8 +98,22 @@ class CityFragment: Fragment() {
         return binding.root
     }
 
+    private fun initMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Clear menu because we don't want settings icon
+                menu.clear()
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Do nothing
+                return false
+            }
+        }, viewLifecycleOwner)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState) //?
+        initMenu()
 //        viewModel.setTitle("One Post")
 
 //        viewModel.hideActionBarFavorites()

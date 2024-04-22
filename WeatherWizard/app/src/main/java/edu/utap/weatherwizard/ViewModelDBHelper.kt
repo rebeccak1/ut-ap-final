@@ -11,9 +11,6 @@ class ViewModelDBHelper {
     private val rootCollection = "allCityMeta"
     private val unitsCollection = "allUnits"
 
-
-    // If we want to listen for real time updates use this
-    // .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
     private fun limitAndGet(query: Query,
                             resultListener: (List<CityMeta>)->Unit) {
         query
@@ -21,7 +18,6 @@ class ViewModelDBHelper {
             .get()
             .addOnSuccessListener { result ->
                 Log.d("XXX", "allNotes fetch ${result!!.documents.size}")
-                // NB: This is done on a background thread
                 resultListener(result.documents.mapNotNull {
                     it.toObject(CityMeta::class.java)
                 })
@@ -39,7 +35,6 @@ class ViewModelDBHelper {
             .get()
             .addOnSuccessListener { result ->
                 Log.d("XXX", "allNotes fetch ${result!!.documents.size}")
-                // NB: This is done on a background thread
                 resultListener(result.documents.mapNotNull {
                     it.toObject(UnitsMeta::class.java)
                 })

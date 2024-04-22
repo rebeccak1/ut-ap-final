@@ -35,8 +35,6 @@ class MainViewModel : ViewModel() {
     private var currentCityMeta = MutableLiveData<CityMeta>()
     private var currentUnitsMeta = MutableLiveData<UnitsMeta>()
 
-    var guestUnits = "Fahrenheit"
-
     private var netWeatherDaily = MediatorLiveData<List<WeatherDaily>>().apply {
 
         addSource(currentUnitsMeta) {
@@ -45,25 +43,7 @@ class MainViewModel : ViewModel() {
                         + Dispatchers.Default
             ) {
                 Log.d("XXX", "netweatherdaily fetch from current units")
-//                postValue(repository.getWeather(latlon.value?.latitude.toString(), latlon.value?.longitude.toString(), unit))
-//                val newNetWeatherDaily = mutableListOf<WeatherDaily>()
-//                if (currentNetWeatherDaily != null) {
-//                    Log.d("XXX", "current net weather daily is not null")
-//                    for(wd in currentNetWeatherDaily){
-//                        Log.d("XXX", "looping in change units")
-//                        val newwd = wd.copy()
-//                        if(it.units == "Fahrenheit") {
-//                            newwd.temp.max = (newwd.temp.max * 9.0/5.0) + 32
-//                            newwd.temp.min = (newwd.temp.min * 9.0/5.0) + 32
-//                        }
-//                        else{
-//                            newwd.temp.max = (newwd.temp.max - 32 ) * 5.0/9.0
-//                            newwd.temp.min = (newwd.temp.min - 32 ) * 5.0/9.0
-//                        }
-//                        newNetWeatherDaily.add(newwd)
-//                    }
-//                }
-//                Log.d("XXX", "new net weatherdaily size " + newNetWeatherDaily.size)
+
                 if(it != null && currentCityMeta.value!=null){
                     postValue(
                         repository.getWeather(

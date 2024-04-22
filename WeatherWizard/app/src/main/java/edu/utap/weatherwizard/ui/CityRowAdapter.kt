@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.utap.weatherwizard.databinding.CityRowBinding
 import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.model.CityMeta
-import com.google.android.gms.maps.model.LatLng
 import androidx.navigation.NavController
 
 class CityRowAdapter(private val viewModel: MainViewModel,

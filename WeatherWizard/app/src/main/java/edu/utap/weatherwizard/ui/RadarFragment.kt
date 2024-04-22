@@ -1,6 +1,5 @@
 package edu.utap.weatherwizard.ui
 
-import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +15,6 @@ import android.widget.Spinner
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -24,8 +22,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.TileOverlay
 import edu.utap.weatherwizard.databinding.FragmentRadarBinding
-import kotlin.math.ln
-import kotlin.math.sin
 import com.google.android.gms.maps.model.TileOverlayOptions
 import com.google.android.gms.maps.model.UrlTileProvider
 import com.google.android.gms.maps.model.TileProvider
@@ -37,22 +33,18 @@ import java.util.Locale
 class RadarFragment: Fragment(), OnMapReadyCallback {
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var map: GoogleMap
-    private lateinit var mMoonTiles: TileOverlay
+    private lateinit var mTiles: TileOverlay
     val currentMap = "Precipitation"
     private val radarMaps: Array<String> by lazy {
         resources.getStringArray(R.array.radarmaps_array)
     }
     companion object {
         var mapFragment : SupportMapFragment?=null
-        fun newInstance() = RadarFragment()
-        private var MOON_MAP_URL_FORMAT = "https://tile.openweathermap.org/map/precipitation_new/%d/%d/%d.png?appid=1e014bfae9d273d95b456a0e8b290034"
+        private var URL_FORMAT = "https://tile.openweathermap.org/map/precipitation_new/%d/%d/%d.png?appid=1e014bfae9d273d95b456a0e8b290034"
 
     }
-    private var view: View? = null
     private var _binding: FragmentRadarBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
-    private val binding get() = _binding!!
-//    private val args: RadarFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,14 +116,18 @@ class RadarFragment: Fragment(), OnMapReadyCallback {
         goBut.setOnClickListener {
             if (radarMap != currentMap) {
                 if(radarMap == "Precipitation") {
-                    MOON_MAP_URL_FORMAT =
+                    URL_FORMAT =
                         "https://tile.openweathermap.org/map/precipitation_new/%d/%d/%d.png?appid=1e014bfae9d273d95b456a0e8b290034"
                 }
-                else {
-                    MOON_MAP_URL_FORMAT =
+                else if (radarMap == "Temperature"){
+                    URL_FORMAT =
                         "https://tile.openweathermap.org/map/temp_new/%d/%d/%d.png?appid=1e014bfae9d273d95b456a0e8b290034"
                 }
-                mMoonTiles.clearTileCache()
+                else{
+                    URL_FORMAT =
+                        "https://tile.openweathermap.org/map/wind_new/%d/%d/%d.png?appid=1e014bfae9d273d95b456a0e8b290034"
+                }
+                mTiles.clearTileCache()
             }
         }
         radarSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -154,9 +150,8 @@ class RadarFragment: Fragment(), OnMapReadyCallback {
         val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
             @Synchronized
             override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
-                // The moon tile coordinate system is reversed.  This is not normal.
-                val reversedY = (1 shl zoom) - y - 1
-                val s = String.format(Locale.US, MOON_MAP_URL_FORMAT, zoom, x, y)
+
+                val s = String.format(Locale.US, URL_FORMAT, zoom, x, y)
                 var url: URL? = null
                 url = try {
                     URL(s)
@@ -172,8 +167,8 @@ class RadarFragment: Fragment(), OnMapReadyCallback {
         val cm = viewModel.observeCurrentCM().value
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(cm!!.latitude.toDouble(), cm.longitude.toDouble()), 5.0f))
-        mMoonTiles = map.addTileOverlay(TileOverlayOptions().tileProvider(tileProvider))!!
-        mMoonTiles.transparency = 0.1f
+        mTiles = map.addTileOverlay(TileOverlayOptions().tileProvider(tileProvider))!!
+        mTiles.transparency = 0.1f
 
 
     }

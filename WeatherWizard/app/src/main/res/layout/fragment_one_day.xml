@@ -105,7 +105,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/blue1"
-        android:text="\uD83D\uDCA7 Precipitation:"
+        android:text="Precipitation:"
         android:layout_margin="8dp"
         />
     <TextView
@@ -134,18 +134,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
     <TextView
-        android:id="@+id/feelsLike"
+        android:id="@+id/feelsLikeDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="@color/blue1"
-        android:text="Feels Like High"
+        android:text="Feels Like Daytime"
         android:layout_margin="8dp"
         app:layout_constraintTop_toBottomOf="@id/summary"
         app:layout_constraintStart_toStartOf="parent"
         />
     <TextView
-        android:id="@+id/feelsLikeHighEdit"
+        android:id="@+id/feelsLikeDayEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -159,7 +159,37 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#c0c0c0"
-        app:layout_constraintTop_toBottomOf="@id/feelsLike"
+        app:layout_constraintTop_toBottomOf="@id/feelsLikeDay"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/feelsLikeLow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/blue1"
+        android:text="Feels Like Nighttime"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/feelsLikeDay"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:id="@+id/feelsLikeNightEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/blue1"
+        android:text="97"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/feelsLikeDay"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"
+        app:layout_constraintTop_toBottomOf="@id/feelsLikeLow"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
@@ -170,7 +200,7 @@
         android:textColor="@color/blue1"
         android:text="Max UV Index"
         android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/feelsLike"
+        app:layout_constraintTop_toBottomOf="@id/feelsLikeNightEdit"
         app:layout_constraintStart_toStartOf="parent"
         />
     <TextView
@@ -181,7 +211,7 @@
         android:textColor="@color/blue1"
         android:text="97"
         android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/feelsLike"
+        app:layout_constraintTop_toBottomOf="@id/feelsLikeNightEdit"
         app:layout_constraintEnd_toEndOf="parent"
         />
     <View
@@ -248,6 +278,99 @@
         android:layout_height="2dp"
         android:background="#c0c0c0"
         app:layout_constraintTop_toBottomOf="@id/cloudsText"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/dewpointText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/blue1"
+        android:text="Dew point"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/humidityText"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+    <TextView
+        android:id="@+id/dewpointEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/blue1"
+        android:text="97"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/humidityEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"
+        app:layout_constraintTop_toBottomOf="@id/humidityEdit"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/pressureText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/blue1"
+        android:text="Pressure"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/dewpointText"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+    <TextView
+        android:id="@+id/pressureEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/blue1"
+        android:text="97"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/dewpointEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"
+        app:layout_constraintTop_toBottomOf="@id/dewpointEdit"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/windspeedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/blue1"
+        android:text="Wind speed"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/pressureText"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+    <TextView
+        android:id="@+id/windspeedEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/blue1"
+        android:text="97"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/pressureEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"
+        app:layout_constraintTop_toBottomOf="@id/pressureEdit"
         app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

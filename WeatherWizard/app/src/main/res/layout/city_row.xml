@@ -7,8 +7,6 @@
     android:orientation="horizontal"
     android:id="@+id/rowview"
     >
-    <!-- Background attribute gives the whole layout the satisfying ripple
-    effect on selection -->
 
     <TextView
         android:id="@+id/rowCity"

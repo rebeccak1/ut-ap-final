@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    private lateinit var authUser: AuthUser
     private val viewModel: MainViewModel by viewModels()
 
     private fun initMenu() {
@@ -78,8 +77,6 @@ class MainActivity : AppCompatActivity() {
             viewModel.setHome()
         }
 
-
-        // Set up our nav graph
         navController = findNavController(R.id.main_frame)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         // If we have a toolbar (not actionbar) we don't need to override
@@ -91,7 +88,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        // XXX Write me
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }

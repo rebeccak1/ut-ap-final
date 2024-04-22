@@ -6,9 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import edu.utap.weatherwizard.MainActivity
 import edu.utap.weatherwizard.databinding.ActivityLoginBinding
-import edu.utap.weatherwizard.databinding.ActivityRegistrationBinding
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -21,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        binding.signUpRedirectText.setOnClickListener {
+        binding.signupButton.setOnClickListener {
             val intent = Intent(
                 this@LoginActivity,
                 RegistrationActivity::class.java

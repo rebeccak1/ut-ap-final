@@ -14,12 +14,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.databinding.FragmentOneDayBinding
-import edu.utap.weatherwizard.glide.Glide
 import java.text.SimpleDateFormat
 
-// XXX Write most of this file
 class OneDayFragment: Fragment() {
-    // XXX initialize viewModel
     private val viewModel: MainViewModel by activityViewModels()
 
     private var _binding: FragmentOneDayBinding? = null
@@ -68,11 +65,15 @@ class OneDayFragment: Fragment() {
         binding.dailyDay.text = dow +", " + month + " " + dom
         binding.cloudsEdit.text = args.daily.clouds.toString() + "%"
         binding.humidityEdit.text = args.daily.humidity.toString() + "%"
-        binding.precippct.text = String.format("%3.0f",args.daily.pop*100)
+        binding.precippct.text = String.format("%3.0f",args.daily.pop*100) +"%"
         binding.high.text = String.format("%3.0f",args.daily.temp.max)
         binding.summary.text = args.daily.summary
         binding.uvEdit.text = String.format("%3.0f",args.daily.uvi)
-        binding.feelsLikeHighEdit.text = String.format("%3.0f",args.daily.feels_like.day)
+        binding.feelsLikeDayEdit.text = String.format("%3.0f",args.daily.feels_like.day)
+        binding.feelsLikeNightEdit.text = String.format("%3.0f",args.daily.feels_like.night)
+        binding.pressureEdit.text = args.daily.pressure.toString()
+        binding.dewpointEdit.text = String.format("%3.0f",args.daily.dew_point)
+        binding.windspeedEdit.text = String.format("%3.0f",args.daily.wind_speed)
         binding.units.text = when(viewModel.observeCurrentUM().value?.units){
             "Fahrenheit" -> "F"
             "Celsius" -> "C"

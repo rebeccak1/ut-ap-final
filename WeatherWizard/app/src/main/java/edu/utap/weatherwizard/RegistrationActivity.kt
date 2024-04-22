@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import edu.utap.weatherwizard.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import edu.utap.weatherwizard.databinding.ActivityRegistrationBinding
 
@@ -28,7 +26,7 @@ class RegistrationActivity : AppCompatActivity() {
             )
             startActivity(intent)
         }
-        binding.loginRedirectText.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             val intent = Intent(
                 this@RegistrationActivity,
                 LoginActivity::class.java

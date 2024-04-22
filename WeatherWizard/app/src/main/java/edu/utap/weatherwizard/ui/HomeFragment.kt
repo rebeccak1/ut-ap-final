@@ -3,20 +3,14 @@ package edu.utap.weatherwizard.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import androidx.core.view.MenuProvider
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.model.LatLng
 import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.databinding.FragmentHomeBinding
 import edu.utap.weatherwizard.invalidUser
@@ -120,10 +114,7 @@ class HomeFragment: Fragment() {
                         binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
                         cm.favorite = true
                         viewModel.saveCityMeta(cm)
-//
-//                    val cm = viewModel.createCityMeta(viewModel.observeCity().value!!,
-//                        viewModel.observeState().value!!, viewModel.observeUnits().value!!,
-//                        false, latlng?.latitude.toString(), latlng?.longitude.toString())
+
                     } else {
                         Log.d("XXX", "home fragment clicked on city " + cm.city)
                         Log.d("XXX", "not a favorite")
