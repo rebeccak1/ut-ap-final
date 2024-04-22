@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import edu.utap.weatherwizard.R
 import edu.utap.weatherwizard.databinding.FragmentSettingsBinding
+import edu.utap.weatherwizard.invalidUser
 
 class SettingsFragment : Fragment() {
     // https://developer.android.com/topic/libraries/view-binding#fragments
@@ -80,7 +81,9 @@ class SettingsFragment : Fragment() {
                 val um = viewModel.observeCurrentUM().value!!
                 um.units = unit!!
                 viewModel.setUnitsMeta(um)
-                viewModel.updateUnitsMeta(um, unit!!)
+                if(viewModel.getCurrentUser() != invalidUser) {
+                    viewModel.updateUnitsMeta(um, unit!!)
+                }
             }
 
             findNavController().popBackStack()

@@ -68,11 +68,11 @@ class OneDayFragment: Fragment() {
         binding.dailyDay.text = dow +", " + month + " " + dom
         binding.cloudsEdit.text = args.daily.clouds.toString() + "%"
         binding.humidityEdit.text = args.daily.humidity.toString() + "%"
-        binding.precippct.text = (args.daily.pop*100).toString()
-        binding.high.text = String.format("%2.0f",args.daily.temp.max)
+        binding.precippct.text = String.format("%3.0f",args.daily.pop*100)
+        binding.high.text = String.format("%3.0f",args.daily.temp.max)
         binding.summary.text = args.daily.summary
-        binding.uvEdit.text = String.format("%2.0f",args.daily.uvi)
-        binding.feelsLikeHighEdit.text = args.daily.feels_like.day.toString()
+        binding.uvEdit.text = String.format("%3.0f",args.daily.uvi)
+        binding.feelsLikeHighEdit.text = String.format("%3.0f",args.daily.feels_like.day)
         binding.units.text = when(viewModel.observeCurrentUM().value?.units){
             "Fahrenheit" -> "F"
             "Celsius" -> "C"

@@ -1,5 +1,6 @@
 package edu.utap.weatherwizard.ui
 
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -55,20 +56,60 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
         val calendar = java.util.Calendar.getInstance()
         calendar.setTime(date)
 
+        val maxMaxTemp = viewModel.observeMaxMaxTemp()
+        val maxMinTemp = viewModel.observeMaxMinTemp()
+
+        val minMaxTemp = viewModel.observeMinMaxTemp()
+        val minMinTemp = viewModel.observeMinMinTemp()
+
         rowBinding.rowDay.text = dow
         rowBinding.rowDate.text = calendar.get(java.util.Calendar.DAY_OF_MONTH).toString()
         rowBinding.rowHigh.text = String.format("%2.0f",item.temp.max)
         rowBinding.rowLow.text = String.format("%2.0f",item.temp.min)
-//        val weight = (1-(.2*(1-item.temp.min/60)))/2
+        var ratio = (item.temp.max-maxMinTemp)/(maxMaxTemp - maxMinTemp)
+        var w = .2 - .1*ratio
+
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            weight =   (.2*(1-item.temp.max/100)).toFloat()
+            weight =  w.toFloat()
         }
-        params.gravity = Gravity.CENTER;
+        params.gravity = Gravity.CENTER
 
+        ratio = (item.temp.min-minMinTemp)/(minMaxTemp - minMinTemp)
+
+        var w1 = .1 + .1*ratio
+
+        val params1 = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            weight =  w1.toFloat()
+        }
+        params1.gravity = Gravity.CENTER
+//        Log.d("XXX", w.toString() +" "+ w1.toString() +" " + rowBinding.rowIcon.layoutParams.width)
         rowBinding.rowHigh.setLayoutParams(params)
+        rowBinding.rowLow.setLayoutParams(params1)
+
+        val width = holder.itemView.getContext().getResources().getDisplayMetrics().density
+
+        val params2 = LinearLayout.LayoutParams(
+            20*width.toInt(),
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            weight =  (1-w-w1).toFloat()
+        }
+        params2.gravity = Gravity.CENTER
+        rowBinding.colorbar.setLayoutParams(params2)
+
+        rowBinding.rowIcon.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        rowBinding.rowIcon.requestLayout()
+//        rowBinding.colorbar.layoutParams = LayoutParams(20*width.toInt(), LayoutParams.WRAP_CONTENT,
+//            (1-w-w1).toFloat())
+
+
+
 //        rowBinding.rowHigh.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
 //            (.2*(1-item.temp.max/100)).toFloat()
 //        rowBinding.colorbar.layoutParams = LayoutParams(rowBinding.colorbar.width, LayoutParams.WRAP_CONTENT,

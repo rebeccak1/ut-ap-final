@@ -35,6 +35,7 @@ class MainViewModel : ViewModel() {
     private var currentCityMeta = MutableLiveData<CityMeta>()
     private var currentUnitsMeta = MutableLiveData<UnitsMeta>()
 
+    var guestUnits = "Fahrenheit"
 
     private var netWeatherDaily = MediatorLiveData<List<WeatherDaily>>().apply {
 
@@ -109,6 +110,57 @@ class MainViewModel : ViewModel() {
     fun observeNetWeatherDaily(): LiveData<List<WeatherDaily>> {
         return netWeatherDaily
     }
+
+    fun observeMinMaxTemp(): Double{
+        val nwd = netWeatherDaily.value
+
+        var min = 0.0
+        for (i in nwd!!) {
+            if (i.temp.min > min) {
+                min = i.temp.min
+            }
+        }
+        return min
+    }
+
+    fun observeMinMinTemp(): Double{
+        val nwd = netWeatherDaily.value
+
+        var min = 200.0
+        for (i in nwd!!) {
+            if (i.temp.min < min) {
+                min = i.temp.min
+            }
+        }
+        return min
+    }
+
+
+
+    fun observeMaxMaxTemp(): Double{
+        val nwd = netWeatherDaily.value
+
+        var max = 0.0
+        for (i in nwd!!) {
+            if (i.temp.max > max) {
+                max = i.temp.max
+            }
+        }
+        return max
+    }
+
+    fun observeMaxMinTemp(): Double{
+        val nwd = netWeatherDaily.value
+
+        var max = 200.0
+        for (i in nwd!!) {
+            if (i.temp.max < max) {
+                max = i.temp.max
+            }
+        }
+        return max
+    }
+
 
     fun getCurrentUser(): User{
         return currentAuthUser

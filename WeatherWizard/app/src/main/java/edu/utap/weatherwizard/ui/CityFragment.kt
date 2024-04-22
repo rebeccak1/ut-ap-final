@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import com.google.android.gms.maps.model.LatLng
+import edu.utap.weatherwizard.invalidUser
 
 class CityFragment: Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
@@ -40,12 +41,24 @@ class CityFragment: Fragment() {
                 val address = addresses[0]
                 if(address.hasLatitude() && address.hasLongitude()) {
                     //check if already exists
-                    var existsCM = viewModel.getCityState(address.locality, address.adminArea)
-                    if(existsCM != null){
-                        viewModel.setCityMeta(existsCM)
-//                        viewModel.setFavBool(existsCM.favorite)
+                    if(viewModel.getCurrentUser() != invalidUser) {
+                        var existsCM = viewModel.getCityState(address.locality, address.adminArea)
+                        if (existsCM != null) {
+                            viewModel.setCityMeta(existsCM)
+                        } else {
+                            var cm = viewModel.createCityMeta(
+                                address.locality,
+                                address.adminArea,
+                                "Fahrenheit",
+                                false,
+                                false,
+                                address.latitude.toString(),
+                                address.longitude.toString()
+                            )
+                            viewModel.setCityMeta(cm)
+                        }
                     }
-                    else {
+                    else{
                         var cm = viewModel.createCityMeta(
                             address.locality,
                             address.adminArea,
@@ -55,7 +68,6 @@ class CityFragment: Fragment() {
                             address.latitude.toString(),
                             address.longitude.toString()
                         )
-//                        viewModel.setFavBool(false)
                         viewModel.setCityMeta(cm)
                     }
 

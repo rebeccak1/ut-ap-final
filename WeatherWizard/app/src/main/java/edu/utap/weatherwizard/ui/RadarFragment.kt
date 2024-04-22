@@ -173,7 +173,7 @@ class RadarFragment: Fragment(), OnMapReadyCallback {
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(cm!!.latitude.toDouble(), cm.longitude.toDouble()), 5.0f))
         mMoonTiles = map.addTileOverlay(TileOverlayOptions().tileProvider(tileProvider))!!
-        mMoonTiles.transparency = 0.2f
+        mMoonTiles.transparency = 0.1f
 
 
     }
