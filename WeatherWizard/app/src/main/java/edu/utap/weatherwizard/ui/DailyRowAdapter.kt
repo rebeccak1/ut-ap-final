@@ -89,11 +89,14 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
         }
         params1.gravity = Gravity.CENTER
 //        Log.d("XXX", w.toString() +" "+ w1.toString() +" " + rowBinding.rowIcon.layoutParams.width)
+//        rowBinding.rowDay.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+//        rowBinding.rowDay.requestLayout()
         rowBinding.rowHigh.setLayoutParams(params)
         rowBinding.rowLow.setLayoutParams(params1)
 
         val width = holder.itemView.getContext().getResources().getDisplayMetrics().density
 
+        rowBinding.rowHigh.layoutParams.height
         val params2 = LinearLayout.LayoutParams(
             20*width.toInt(),
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -103,22 +106,7 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
         params2.gravity = Gravity.CENTER
         rowBinding.colorbar.setLayoutParams(params2)
 
-        rowBinding.rowIcon.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        rowBinding.rowIcon.requestLayout()
-//        rowBinding.colorbar.layoutParams = LayoutParams(20*width.toInt(), LayoutParams.WRAP_CONTENT,
-//            (1-w-w1).toFloat())
 
-
-
-//        rowBinding.rowHigh.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-//            (.2*(1-item.temp.max/100)).toFloat()
-//        rowBinding.colorbar.layoutParams = LayoutParams(rowBinding.colorbar.width, LayoutParams.WRAP_CONTENT,
-//            (weight).toFloat())
-//
-//        rowBinding.rowLow.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-//            (weight).toFloat())
-//
-//        rowBinding.rowIcon.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1.0F)
 
         when(item.weather[0].icon){
             "01d" -> rowBinding.rowIcon.setImageResource(R.drawable.clearsky)
@@ -131,11 +119,10 @@ class DailyRowAdapter(private val viewModel: MainViewModel,
             "13d" -> rowBinding.rowIcon.setImageResource(R.drawable.snow)
             "50d" -> rowBinding.rowIcon.setImageResource(R.drawable.mist)
         }
+        rowBinding.rowIcon.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        rowBinding.rowIcon.requestLayout()
 
-//        val url = "https://openweathermap.org/img/wn/" + item.weather[0].icon + "2x.png"
-//        Glide.glideFetch(url, url, rowBinding.rowIcon)
 
-//        Log.d("XXX", "on bind currentindex position "+ position.toString() + " " + item.title)
     }
 
 
