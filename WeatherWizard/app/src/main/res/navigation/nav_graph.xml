@@ -23,6 +23,10 @@
             app:destination="@id/cityFragment">
         </action>
         <action
+            android:id="@+id/action_homeFragment_to_ratingsFragment"
+            app:destination="@id/ratingsFragment">
+        </action>
+        <action
             android:id="@+id/action_homeFragment_to_radarFragment"
             app:destination="@id/radarFragment">
         </action>
@@ -43,6 +47,12 @@
         tools:layout="@layout/fragment_city"
         android:name="edu.utap.weatherwizard.ui.CityFragment"
         android:label="Cities" >
+    </fragment>
+    <fragment
+        android:id="@+id/ratingsFragment"
+        tools:layout="@layout/fragment_ratings"
+        android:name="edu.utap.weatherwizard.ui.RatingsFragment"
+        android:label="Ratings" >
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

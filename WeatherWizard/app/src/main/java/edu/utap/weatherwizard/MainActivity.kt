@@ -71,10 +71,16 @@ class MainActivity : AppCompatActivity() {
 //                viewModel.repoFetch()
                 Log.d("XXX","city meta posted size " + viewModel.observeCityMeta().value?.size.toString())
             }
+
         }
         else{
             viewModel.setUnits()
             viewModel.setHome()
+        }
+
+        viewModel.fetchInitialNotes {
+            Log.d("XXX","notes size " + viewModel.observeRatings().value?.size.toString())
+
         }
 
         navController = findNavController(R.id.main_frame)

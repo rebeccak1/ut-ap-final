@@ -5,11 +5,58 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import edu.utap.weatherwizard.model.CityMeta
 import edu.utap.weatherwizard.model.UnitsMeta
+import edu.utap.weatherwizard.model.Rating
+
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.ListenerRegistration
 
 class ViewModelDBHelper {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val rootCollection = "allCityMeta"
     private val unitsCollection = "allUnits"
+    private val ratingsCollection = "allRatings"
+    var noteListener: ListenerRegistration? = null
+
+    fun fetchInitiaRatings(ratingsList: MutableLiveData<List<Rating>>,
+                          callback:()->Unit) {
+        dbFetchRatings(ratingsList, callback)
+    }
+
+
+
+    private fun dbFetchRatings(ratingsList: MutableLiveData<List<Rating>>,
+                             callback:()->Unit = {}) {
+        db.collection(ratingsCollection)
+
+            .orderBy("city", Query.Direction.DESCENDING)
+            .limit(100)
+            .addSnapshotListener { value, error ->
+                if(error!=null){
+                    return@addSnapshotListener
+                }
+                ratingsList.postValue(value!!.documents.mapNotNull {
+                    it.toObject(Rating::class.java)
+                })
+            }
+
+    }
+    fun createRating(
+        rating: Rating,
+        ratingsList: MutableLiveData<List<Rating>>
+    ) {
+        // We can get ID locally
+        // note.firestoreID = db.collection("allNotes").document().id
+
+        db.collection(ratingsCollection)
+            .add(rating)
+            .addOnSuccessListener {
+
+                dbFetchRatings(ratingsList)
+            }
+            .addOnFailureListener { e ->
+                Log.w(javaClass.simpleName, "Error ", e)
+            }
+    }
 
     private fun limitAndGet(query: Query,
                             resultListener: (List<CityMeta>)->Unit) {

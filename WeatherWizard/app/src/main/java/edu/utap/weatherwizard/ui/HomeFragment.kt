@@ -98,6 +98,10 @@ class HomeFragment: Fragment() {
             val action = HomeFragmentDirections.actionHomeFragmentToRadarFragment()
             findNavController().navigate(action)
         }
+        binding.star.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToRatingsFragment()
+            findNavController().navigate(action)
+        }
 
         binding.favIcon.setOnClickListener {
             if(viewModel.getCurrentUser() != invalidUser) {
@@ -117,10 +121,10 @@ class HomeFragment: Fragment() {
 
                     } else {
                         Log.d("XXX", "home fragment clicked on city " + cm.city)
-                        Log.d("XXX", "not a favorite")
+                        Log.d("XXX", "a favorite")
                         binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-                        cm.favorite = false
                         viewModel.remove(cm)
+                        cm.favorite = false
                     }
                 }
             }
@@ -131,6 +135,9 @@ class HomeFragment: Fragment() {
                 val home = cm?.home
                 val fav = cm?.favorite
                 if(home!!){
+                    Log.d("XXX", "home fragment clicked on city " + cm.city)
+                    Log.d("XXX", "home")
+
                     cm.home = false
                     cm.favorite = true
                     viewModel.updateCityMeta(cm, false, true)
@@ -139,6 +146,8 @@ class HomeFragment: Fragment() {
 
                 }
                 else{
+                    Log.d("XXX", "home fragment clicked on city " + cm.city)
+                    Log.d("XXX", "not home")
                     val prevHome = viewModel.getHome()
                     cm.home = true
                     if(prevHome != null){

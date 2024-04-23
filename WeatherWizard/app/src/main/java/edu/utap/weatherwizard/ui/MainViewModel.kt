@@ -17,6 +17,7 @@ import edu.utap.weatherwizard.api.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.google.android.gms.maps.model.LatLng
+import edu.utap.weatherwizard.model.Rating
 import edu.utap.weatherwizard.model.UnitsMeta
 
 class MainViewModel : ViewModel() {
@@ -34,6 +35,8 @@ class MainViewModel : ViewModel() {
 
     private var currentCityMeta = MutableLiveData<CityMeta>()
     private var currentUnitsMeta = MutableLiveData<UnitsMeta>()
+
+    private var ratingsList = MutableLiveData<List<Rating>>()
 
     private var netWeatherDaily = MediatorLiveData<List<WeatherDaily>>().apply {
 
@@ -86,6 +89,26 @@ class MainViewModel : ViewModel() {
 //        val fetch = latlon.value!!
 //        latlon.value = fetch
 //    }
+
+    fun fetchInitialNotes(callback: ()->Unit) {
+        dbHelp.fetchInitiaRatings(ratingsList, callback)
+    }
+    fun observeRatings(): LiveData<List<Rating>> {
+        return ratingsList
+    }
+
+    fun createRating(rating: Int) {
+        val currentUser = currentAuthUser
+        val note = Rating(
+            name = currentUser.name,
+            ownerUid = currentUser.uid,
+            city = currentCityMeta.value!!.city,
+            state = currentCityMeta.value!!.state,
+            rating = rating
+            // database sets firestoreID
+        )
+        dbHelp.createRating(note, ratingsList)
+    }
 
     fun observeNetWeatherDaily(): LiveData<List<WeatherDaily>> {
         return netWeatherDaily
