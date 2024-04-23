@@ -140,6 +140,7 @@ class HomeFragment: Fragment() {
 
                     cm.home = false
                     cm.favorite = true
+                    Log.d("XXX", cm.firestoreID)
                     viewModel.updateCityMeta(cm, false, true)
                     binding.homeIcon.setImageResource(R.drawable.outline_home_24)
                     binding.favIcon.setImageResource(R.drawable.ic_favorite_black_24dp)
@@ -159,7 +160,9 @@ class HomeFragment: Fragment() {
                         binding.favIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
                     }
                     else{
+                        Log.d("XXX", "saving home")
                         viewModel.saveCityMeta(cm)
+                        viewModel.setCityMeta(cm)
                     }
                     binding.homeIcon.setImageResource(R.drawable.baseline_home_24)
 
